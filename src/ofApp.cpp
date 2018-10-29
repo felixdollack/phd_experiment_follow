@@ -16,6 +16,9 @@ void ofApp::setup(){
     setupVisualFeedback();
     setupTCPserver();
     setupEogTrigger();
+    this->_source_instance = new Blinky(this->_source_radius);
+    this->_source_positions = ofVec2f(0, 0);
+    this->_source_instance->setPosition(this->_source_positions);
 }
 
 void ofApp::setupTCPserver() {
@@ -87,6 +90,7 @@ void ofApp::update(){
     }
     this->_vicon_receiver.updateData();
     this->_head_data = this->_vicon_receiver.getLatestData();
+    this->_source_instance->update();
 }
 
 //--------------------------------------------------------------
@@ -104,6 +108,8 @@ void ofApp::drawVisualFeedback() {
     ofPushMatrix();
     {
         ofTranslate(this->_ui_center);
+        // draw sound source
+        _source_instance->draw();
     }
     ofPopMatrix();
 }

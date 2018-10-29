@@ -5,6 +5,7 @@
 #include "ofxGui.h"
 #include "ofx_udp_trigger.h"
 #include "vicon_receiver.h"
+#include "ofx_blinky.h"
 
 class ofApp : public ofBaseApp{
 
@@ -52,6 +53,8 @@ private:
 
     // sound source specific settings
     float _source_height, _source_radius;
+    ofVec2f _source_positions;
+    Blinky *_source_instance;
 
     // shimmer eog
     string _eog_host;
