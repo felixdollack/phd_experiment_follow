@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 #include "ofxGui.h"
+#include "ofx_udp_trigger.h"
 #include "vicon_receiver.h"
 
 class ofApp : public ofBaseApp{
@@ -53,6 +54,8 @@ private:
 
     // shimmer eog
     string _eog_host;
+    UdpTrigger *_eog_trigger;
+    void setupEogTrigger();
 
     // motion capture
     int _mocap_receive_port, _mocap_send_port;

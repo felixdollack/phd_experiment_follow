@@ -6,6 +6,7 @@ void ofApp::setup(){
     setupUI();
     setupVisualFeedback();
     setupTCPserver();
+    setupEogTrigger();
 }
 
 void ofApp::setupTCPserver() {
@@ -13,6 +14,11 @@ void ofApp::setupTCPserver() {
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
     }
+}
+
+void ofApp::setupEogTrigger() {
+    this->_eog_trigger = new UdpTrigger(this->_eog_host);
+    this->_eog_trigger->connectToHost();
 }
 
 void ofApp::setupUI() {
@@ -155,7 +161,9 @@ void ofApp::setPathToLimacon(){
 void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
         this->_toggle_button_eog.setTextColor(ofColor::green);
+        this->_eog_trigger->startRecording();
     } else {
+        this->_eog_trigger->stopRecording();
         this->_toggle_button_eog.setTextColor(ofColor::red);
     }
 }
@@ -172,7 +180,9 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_toggle_button_sound.setTextColor(ofColor::green);
         // send sound message
         sendMessageToPhone(0, "PLAY/");
+        this->_eog_trigger->sendTrigger("sound_on");
     } else {
+        this->_eog_trigger->sendTrigger("sound_off");
         sendMessageToPhone(0, "STOP/");
         this->_toggle_button_sound.setTextColor(ofColor::red);
         this->_push_button_eight.setTextColor(ofColor::white);
