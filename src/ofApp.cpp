@@ -170,7 +170,10 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_eight.setTextColor(ofColor::black);
         this->_push_button_limacon.setTextColor(ofColor::black);
         this->_toggle_button_sound.setTextColor(ofColor::green);
+        // send sound message
+        sendMessageToPhone(0, "PLAY/");
     } else {
+        sendMessageToPhone(0, "STOP/");
         this->_toggle_button_sound.setTextColor(ofColor::red);
         this->_push_button_eight.setTextColor(ofColor::white);
         this->_push_button_limacon.setTextColor(ofColor::white);
