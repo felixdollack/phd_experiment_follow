@@ -1,5 +1,14 @@
 #include "ofApp.h"
 
+void ofApp::exit(){
+    this->_eog_trigger->stopRecording();
+    disconnectPhone();
+    if (this->_android_tcp_server->isConnected()) {
+        this->_android_tcp_server->close();
+    }
+    this->_vicon_receiver.stop();
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     loadSettingsAndWriteDefaultIfNeeded();
