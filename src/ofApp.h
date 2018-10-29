@@ -41,6 +41,12 @@ private:
     void toggleRecording(const void *sender, bool &value);
     void toggleSound(const void *sender, bool &value);
 
+    // visual feedback
+    void setupVisualFeedback();
+    void drawVisualFeedback();
+    float _ui_world_diameter;
+    ofVec2f _ui_center, _ui_world_start;
+
     // sound source specific settings
     float _source_height, _source_radius;
 

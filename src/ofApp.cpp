@@ -4,6 +4,7 @@
 void ofApp::setup(){
     loadSettingsAndWriteDefaultIfNeeded();
     setupUI();
+    setupVisualFeedback();
 }
 
 void ofApp::setupUI() {
@@ -37,6 +38,13 @@ void ofApp::setupUI() {
     this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
 }
 
+void ofApp::setupVisualFeedback() {
+    ofSetCircleResolution(100);
+    this->_ui_world_diameter = ofGetWindowHeight();
+    this->_ui_center = ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()) - this->_ui_world_diameter/2;
+    this->_ui_world_start = this->_ui_center  - this->_ui_world_diameter/2;
+}
+
 //--------------------------------------------------------------
 void ofApp::update(){
 
@@ -45,7 +53,18 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofClear(0);
+    drawVisualFeedback();
     this->_uiPanel.draw();
+}
+
+void ofApp::drawVisualFeedback() {
+    ofSetColor(ofColor::white);
+    ofDrawRectangle(this->_ui_world_start.x, this->_ui_world_start.y, this->_ui_world_diameter, this->_ui_world_diameter);
+    ofPushMatrix();
+    {
+        ofTranslate(this->_ui_center);
+    }
+    ofPopMatrix();
 }
 
 //--------------------------------------------------------------
