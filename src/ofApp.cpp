@@ -41,6 +41,42 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         writeDefaultSettings();
         this->_settings->loadFile(this->_settings_filename);
     }
+    this->_settings->pushTag("settings");
+    {
+        this->_settings->pushTag("subject");
+        {
+            this->_source_height = this->_settings->getValue("ear_height", 1.60f);
+            this->_ui_head_radius = this->_settings->getValue("ui_radius", 2.0f);
+        }
+        this->_settings->popTag();
+        this->_settings->pushTag("network");
+        {
+            this->_settings->pushTag("android");
+            {
+                this->_android_port = this->_settings->getValue("port", -1);
+            }
+            this->_settings->popTag();
+            this->_settings->pushTag("eog");
+            {
+                this->_eog_host = this->_settings->getValue("host", "");
+            }
+            this->_settings->popTag();
+            this->_settings->pushTag("mocap");
+            {
+                this->_use_vicon = this->_settings->getValue("use_vicon", false);
+                this->_mocap_ip = this->_settings->getValue("host", "");
+                this->_settings->pushTag("port");
+                {
+                    this->_mocap_receive_port = this->_settings->getValue("in",  -1);
+                    this->_mocap_send_port = this->_settings->getValue("out", -1);
+                }
+                this->_settings->popTag();
+            }
+            this->_settings->popTag();
+        }
+        this->_settings->popTag();
+    }
+    this->_settings->popTag();
 }
 
 void ofApp::writeDefaultSettings() {
