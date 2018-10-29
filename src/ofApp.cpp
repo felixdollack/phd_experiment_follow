@@ -3,6 +3,38 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     loadSettingsAndWriteDefaultIfNeeded();
+    setupUI();
+}
+
+void ofApp::setupUI() {
+    this->_uiPanel.setup();
+    this->_uiPanel.add(this->_phone_label.setup("PHONE",""));
+    this->_uiPanel.add(this->_push_button_connect.setup("connect to phone"));
+    this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect from phone"));
+
+    this->_uiPanel.add(this->_tracking_label.setup("TRACKING",""));
+    this->_uiPanel.add(this->_reset_head_origin.setup("reset head origin"));
+    this->_uiPanel.add(this->_toggle_button_eog.setup("record eog", false));
+
+    this->_uiPanel.add(this->_presentation_label.setup("PRESENTATION",""));
+    this->_uiPanel.add(this->_toggle_button_sound.setup("sound on", false));
+    this->_uiPanel.add(this->_push_button_eight.setup("eight"));
+    this->_uiPanel.add(this->_push_button_limacon.setup("limacon"));
+
+    // set gui text and box colors
+    this->_push_button_connect.setTextColor(ofColor::red);
+    this->_push_button_disconnect.setFillColor(ofColor::black);
+    this->_push_button_disconnect.setTextColor(ofColor::black);
+    this->_toggle_button_eog.setTextColor(ofColor::red);
+    this->_toggle_button_sound.setTextColor(ofColor::red);
+
+    // add gui listeners
+    this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
+    this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
+    this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
+    this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
+    this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
 }
 
 //--------------------------------------------------------------
@@ -12,7 +44,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+    ofClear(0);
+    this->_uiPanel.draw();
 }
 
 //--------------------------------------------------------------
@@ -33,6 +66,27 @@ void ofApp::windowResized(int w, int h){
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
 
+}
+
+void ofApp::connectPhone() {
+}
+
+void ofApp::disconnectPhone() {
+}
+
+void ofApp::resetHeadOrigin() {
+}
+
+void ofApp::setPathToEight() {
+}
+
+void ofApp::setPathToLimacon(){
+}
+
+void ofApp::toggleRecording(const void *sender, bool &value) {
+}
+
+void ofApp::toggleSound(const void *sender, bool &value) {
 }
 
 void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
