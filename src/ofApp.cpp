@@ -21,6 +21,13 @@ void ofApp::setupEogTrigger() {
     this->_eog_trigger->connectToHost();
 }
 
+void ofApp::setupMotionCapture() {
+    ofxUDPSettings settings;
+    settings.receiveOn(this->_mocap_receive_port);
+    settings.blocking = false;
+    this->_vicon_receiver.setup(settings);
+}
+
 void ofApp::setupUI() {
     this->_uiPanel.setup();
     this->_uiPanel.add(this->_phone_label.setup("PHONE",""));
@@ -69,6 +76,8 @@ void ofApp::update(){
     } else {
         this->_push_button_connect.setTextColor(ofColor::red);
     }
+    this->_vicon_receiver.updateData();
+    this->_head_data = this->_vicon_receiver.getLatestData();
 }
 
 //--------------------------------------------------------------

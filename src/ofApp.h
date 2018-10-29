@@ -61,6 +61,9 @@ private:
     int _mocap_receive_port, _mocap_send_port;
     string _mocap_ip;
     bool _use_vicon;
+    ViconReceiver _vicon_receiver;
+    HeadPositionAndRotation _head_data;
+    void setupMotionCapture();
 
     // network
     int _android_port;
