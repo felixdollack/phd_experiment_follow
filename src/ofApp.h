@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 #include "ofxGui.h"
+#include "vicon_receiver.h"
 
 class ofApp : public ofBaseApp{
 
@@ -63,4 +64,7 @@ private:
     string _my_ip = "";
     string getIPhost();
     vector<string> getLocalIPs();
+    void setupTCPserver();
+    void sendMessageToPhone(int client, string message);
+    ofxTCPServer* _android_tcp_server;
 };

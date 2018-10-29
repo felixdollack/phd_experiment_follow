@@ -5,6 +5,14 @@ void ofApp::setup(){
     loadSettingsAndWriteDefaultIfNeeded();
     setupUI();
     setupVisualFeedback();
+    setupTCPserver();
+}
+
+void ofApp::setupTCPserver() {
+    if (this->_android_tcp_server == NULL) {
+        this->_android_tcp_server = new ofxTCPServer();
+        this->_android_tcp_server->setMessageDelimiter("");
+    }
 }
 
 void ofApp::setupUI() {
@@ -50,6 +58,11 @@ void ofApp::update(){
     if (this->_my_ip == "") {
         this->_my_ip = getIPhost();
     }
+    if (this->_android_tcp_server->getNumClients() > 0) {
+        this->_push_button_connect.setTextColor(ofColor::green);
+    } else {
+        this->_push_button_connect.setTextColor(ofColor::red);
+    }
 }
 
 //--------------------------------------------------------------
@@ -92,9 +105,42 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 void ofApp::connectPhone() {
+    if (this->_android_tcp_server->getNumClients() <= 0) {
+        bool success = this->_android_tcp_server->setup(this->_android_port);
+        if (success == true) {
+            this->_push_button_connect.removeListener(this, &ofApp::connectPhone);
+            this->_push_button_disconnect.addListener(this, &ofApp::disconnectPhone);
+            this->_push_button_connect.setFillColor(ofColor::black);
+            this->_push_button_disconnect.setFillColor(ofColor::gray);
+            this->_push_button_disconnect.setTextColor(ofColor::white);
+        }
+    }
 }
 
 void ofApp::disconnectPhone() {
+    if (this->_android_tcp_server->isConnected()) {
+        for (int clientID = 0; clientID < this->_android_tcp_server->getNumClients(); clientID++) {
+            sendMessageToPhone(clientID, "END/");
+            this->_android_tcp_server->disconnectClient(clientID);
+        }
+        this->_push_button_disconnect.removeListener(this, &ofApp::disconnectPhone);
+        this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+        this->_push_button_connect.setTextColor(ofColor::red);
+        this->_push_button_connect.setFillColor(ofColor::gray);
+        this->_push_button_disconnect.setFillColor(ofColor::black);
+        this->_push_button_disconnect.setTextColor(ofColor::black);
+    }
+}
+
+void ofApp::sendMessageToPhone(int client, string message) {
+    if (this->_android_tcp_server->isClientConnected(client) == true) {
+        char messageLength[4];
+        for (int i = 0; i < 4; i++) {
+            messageLength[3 - i] = (message.length() >> (i * 8));
+        }
+        this->_android_tcp_server->sendRawBytes(client, messageLength, 4);
+        this->_android_tcp_server->sendRawBytes(client, message.c_str(), message.length());
+    }
 }
 
 void ofApp::resetHeadOrigin() {
