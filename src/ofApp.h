@@ -14,5 +14,10 @@ class ofApp : public ofBaseApp{
 		void keyReleased(int key);
 		void windowResized(int w, int h);
 		void gotMessage(ofMessage msg);
-		
+
+private:
+    ofxXmlSettings *_settings;
+    const string _settings_filename = "settings.xml";
+    void loadSettingsAndWriteDefaultIfNeeded();
+    void writeDefaultSettings();
 };
