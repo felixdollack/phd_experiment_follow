@@ -50,6 +50,7 @@ private:
     void drawVisualFeedback();
     float _ui_world_diameter;
     ofVec2f _ui_center, _ui_world_start;
+    float _x_origin, _y_origin, _z_origin, _phi_origin;
 
     // sound source specific settings
     float _source_height, _source_radius;

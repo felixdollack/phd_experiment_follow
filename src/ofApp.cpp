@@ -16,6 +16,10 @@ void ofApp::setup(){
     setupVisualFeedback();
     setupTCPserver();
     setupEogTrigger();
+    this->_x_origin = 0.0f;
+    this->_y_origin = 0.0f;
+    this->_z_origin = 0.0f;
+    this->_phi_origin = 0.0f;
     this->_source_instance = new Blinky(this->_source_radius);
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
@@ -174,6 +178,12 @@ void ofApp::sendMessageToPhone(int client, string message) {
 }
 
 void ofApp::resetHeadOrigin() {
+    // round to milimeter accuracy
+    this->_x_origin = round(this->_head_data.x_position)/1000;
+    this->_y_origin = round(this->_head_data.y_position)/1000;
+    this->_z_origin = round(this->_head_data.z_position)/1000;
+    // round to 0.1 degree
+    this->_phi_origin = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
 }
 
 void ofApp::setPathToEight() {
