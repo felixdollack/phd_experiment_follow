@@ -60,4 +60,7 @@ private:
 
     // network
     int _android_port;
+    string _my_ip = "";
+    string getIPhost();
+    vector<string> getLocalIPs();
 };
