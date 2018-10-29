@@ -103,9 +103,32 @@ void ofApp::setPathToLimacon(){
 }
 
 void ofApp::toggleRecording(const void *sender, bool &value) {
+    if (value == true) {
+        this->_toggle_button_eog.setTextColor(ofColor::green);
+    } else {
+        this->_toggle_button_eog.setTextColor(ofColor::red);
+    }
 }
 
 void ofApp::toggleSound(const void *sender, bool &value) {
+    if (value == true) {
+        // update ui
+        this->_push_button_eight.removeListener(this, &ofApp::setPathToEight);
+        this->_push_button_limacon.removeListener(this, &ofApp::setPathToLimacon);
+        this->_push_button_eight.setFillColor(ofColor::black);
+        this->_push_button_limacon.setFillColor(ofColor::black);
+        this->_push_button_eight.setTextColor(ofColor::black);
+        this->_push_button_limacon.setTextColor(ofColor::black);
+        this->_toggle_button_sound.setTextColor(ofColor::green);
+    } else {
+        this->_toggle_button_sound.setTextColor(ofColor::red);
+        this->_push_button_eight.setTextColor(ofColor::white);
+        this->_push_button_limacon.setTextColor(ofColor::white);
+        this->_push_button_eight.setFillColor(ofColor::gray);
+        this->_push_button_limacon.setFillColor(ofColor(128));
+        this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
+        this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
+    }
 }
 
 void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
