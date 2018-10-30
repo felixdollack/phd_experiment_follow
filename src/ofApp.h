@@ -56,6 +56,7 @@ private:
     float _source_height, _source_radius;
     ofVec2f _source_positions;
     Blinky *_source_instance;
+    float _path_duration, _path_revolutions;
 
     // shimmer eog
     string _eog_host;

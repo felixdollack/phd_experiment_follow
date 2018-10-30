@@ -242,6 +242,12 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
             this->_ui_head_radius = this->_settings->getValue("ui_radius", 2.0f);
         }
         this->_settings->popTag();
+        this->_settings->pushTag("path");
+        {
+            this->_path_duration = this->_settings->getValue("duration", 10);
+            this->_path_revolutions = this->_settings->getValue("revolutions", 1);
+        }
+        this->_settings->popTag();
         this->_settings->pushTag("network");
         {
             this->_settings->pushTag("android");
@@ -281,6 +287,13 @@ void ofApp::writeDefaultSettings() {
         {
             this->_settings->addValue("ear_height", 1.60f);
             this->_settings->addValue("ui_radius", 15.0f);
+        }
+        this->_settings->popTag();
+        this->_settings->addTag("path");
+        this->_settings->pushTag("path");
+        {
+            this->_settings->addValue("duration", 60);
+            this->_settings->addValue("revolutions", 2);
         }
         this->_settings->popTag();
         this->_settings->addTag("network");
