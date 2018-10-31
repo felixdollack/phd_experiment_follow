@@ -150,7 +150,8 @@ void ofApp::drawVisualFeedback() {
         }
 
         // draw sound source
-        _source_instance->draw();
+        ofSetColor(ofColor::white);
+        this->_source_instance->draw();
     }
     ofPopMatrix();
 }
