@@ -116,6 +116,12 @@ void ofApp::drawVisualFeedback() {
     ofPushMatrix();
     {
         ofTranslate(this->_ui_center);
+        // draw sound path
+        ofSetColor(ofColor::gray);
+        for (int kk=0; kk<this->_full_path.size(); kk++) {
+            ofDrawCircle(this->_full_path[kk]*100, 1.0f);
+        }
+
         // draw sound source
         _source_instance->draw();
     }
