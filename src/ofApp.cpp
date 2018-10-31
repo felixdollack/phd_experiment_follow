@@ -23,7 +23,7 @@ void ofApp::setup(){
     this->_source_instance = new Blinky(this->_source_radius);
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
-    this->_selected_shape = 0;
+    setPathToEight();
 }
 
 void ofApp::setupTCPserver() {
@@ -206,10 +206,22 @@ ofVec2f ofApp::shape_limacon(float b, float a, float time, float time_offset) {
 
 void ofApp::setPathToEight() {
     this->_selected_shape = 0;
+    this->_phi_offset = 45;
+    this->_shape_offset = shape_eight(1.0f, this->_phi_offset, 0.0f);
+    this->_full_path.clear();
+    for (int kk=0; kk<360; kk++) {
+        this->_full_path.push_back(shape_eight(1.0f, ((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
+    }
 }
 
 void ofApp::setPathToLimacon(){
     this->_selected_shape = 1;
+    this->_phi_offset = 45;
+    this->_shape_offset = shape_limacon(0.5f, 1.0f, + this->_phi_offset, 0.0f);
+    this->_full_path.clear();
+    for (int kk=0; kk<360; kk++) {
+        this->_full_path.push_back(shape_limacon(0.5f, 1.0f, ((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
+    }
 }
 
 void ofApp::toggleRecording(const void *sender, bool &value) {

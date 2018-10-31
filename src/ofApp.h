@@ -57,7 +57,12 @@ private:
     ofVec2f _source_positions;
     int _selected_shape;
     Blinky *_source_instance;
-    float _path_duration, _path_revolutions;
+    ofVec2f shape_eight(float a, float time, float time_offset);
+    ofVec2f shape_limacon(float b, float a, float time, float time_offset);
+    vector<ofVec2f> _full_path;
+    float _path_duration, _path_step, _path_revolutions;
+    float _phi_offset;
+    ofVec2f _shape_offset;
 
     // shimmer eog
     string _eog_host;
