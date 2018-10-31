@@ -274,6 +274,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
     }
     this->_settings->pushTag("settings");
     {
+        this->_source_radius = this->_settings->getValue("source_size", 12.0f);
         this->_settings->pushTag("subject");
         {
             this->_source_height = this->_settings->getValue("ear_height", 1.60f);
@@ -320,6 +321,7 @@ void ofApp::writeDefaultSettings() {
     this->_settings->addTag("settings");
     this->_settings->pushTag("settings");
     {
+        this->_settings->addValue("source_size", 12.0f);
         this->_settings->addTag("subject");
         this->_settings->pushTag("subject");
         {
