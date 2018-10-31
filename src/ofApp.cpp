@@ -11,6 +11,7 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetFrameRate(60);
     loadSettingsAndWriteDefaultIfNeeded();
     setupUI();
     setupVisualFeedback();
