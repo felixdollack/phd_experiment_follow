@@ -17,6 +17,7 @@ void ofApp::setup(){
     setupVisualFeedback();
     setupTCPserver();
     setupEogTrigger();
+    setupMotionCapture();
     this->_time = 0.0f;
     this->_step_duration = 1.0f/60;
     this->_path_step = (2*PI)/(this->_path_duration*60);
@@ -130,6 +131,9 @@ void ofApp::draw(){
     drawVisualFeedback();
     this->_uiPanel.draw();
 
+    ofSetColor(ofColor::white);
+    ofDrawBitmapString("origin (x/y): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin), 10, ofGetWindowHeight()-100);
+    ofDrawBitmapString("origin (phi): " + ofToString(this->_phi_origin), 10, ofGetWindowHeight()-85);
     ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
 }
 
