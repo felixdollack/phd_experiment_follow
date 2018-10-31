@@ -36,6 +36,8 @@ void ofApp::setupTCPserver() {
 void ofApp::setupEogTrigger() {
     this->_eog_trigger = new UdpTrigger(this->_eog_host);
     this->_eog_trigger->connectToHost();
+    this->_start_recoring = false;
+    this->_is_recording = false;
 }
 
 void ofApp::setupMotionCapture() {
@@ -247,9 +249,13 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         // send sound message
         sendMessageToPhone(0, "PLAY/");
         this->_eog_trigger->sendTrigger("sound_on");
+        this->_start_recoring = true;
+        this->_is_recording = false;
     } else {
         this->_eog_trigger->sendTrigger("sound_off");
         sendMessageToPhone(0, "STOP/");
+        this->_start_recoring = false;
+        this->_is_recording = false;
         this->_toggle_button_sound.setTextColor(ofColor::red);
         this->_push_button_eight.setTextColor(ofColor::white);
         this->_push_button_limacon.setTextColor(ofColor::white);

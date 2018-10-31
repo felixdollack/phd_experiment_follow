@@ -68,6 +68,7 @@ private:
     string _eog_host;
     UdpTrigger *_eog_trigger;
     void setupEogTrigger();
+    bool _start_recoring, _is_recording;
 
     // motion capture
     int _mocap_receive_port, _mocap_send_port;
