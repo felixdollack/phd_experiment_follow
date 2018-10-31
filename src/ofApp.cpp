@@ -17,6 +17,9 @@ void ofApp::setup(){
     setupVisualFeedback();
     setupTCPserver();
     setupEogTrigger();
+    this->_time = 0.0f;
+    this->_step_duration = 1.0f/60;
+    this->_path_step = (2*PI)/(this->_path_duration*60);
     this->_x_origin = 0.0f;
     this->_y_origin = 0.0f;
     this->_z_origin = 0.0f;
@@ -88,6 +91,9 @@ void ofApp::setupVisualFeedback() {
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    float now = ofGetElapsedTimef();
+    float dt = now - this->_time;
+
     if (this->_my_ip == "") {
         this->_my_ip = getIPhost();
     }
@@ -98,6 +104,23 @@ void ofApp::update(){
     }
     this->_vicon_receiver.updateData();
     this->_head_data = this->_vicon_receiver.getLatestData();
+    // update source position
+    if (this->_is_recording == true) {
+        if (this->_selected_shape == 0) {
+            this->_source_positions = (shape_eight(1.0f, this->_current_phi + this->_phi_offset, 0.0f) - this->_shape_offset)*100;
+        } else {
+            this->_source_positions = (shape_limacon(0.5f, 1.0f, this->_current_phi + this->_phi_offset, 0.0f) - this->_shape_offset)*100;
+        }
+        this->_current_phi += _path_step*(dt/_step_duration);
+        this->_time = now;
+    }
+    if (this->_start_recoring == true){
+        this->_current_phi = 0;
+        this->_start_recoring = false;
+        this->_is_recording = true;
+        this->_time = ofGetElapsedTimef();
+    }
+    this->_source_instance->setPosition(this->_source_positions);
     this->_source_instance->update();
 }
 

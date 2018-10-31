@@ -60,8 +60,8 @@ private:
     ofVec2f shape_eight(float a, float time, float time_offset);
     ofVec2f shape_limacon(float b, float a, float time, float time_offset);
     vector<ofVec2f> _full_path;
-    float _path_duration, _path_step, _path_revolutions;
-    float _phi_offset;
+    float _path_duration, _path_step, _step_duration, _path_revolutions;
+    float _time, _current_phi, _phi_offset;
     ofVec2f _shape_offset;
 
     // shimmer eog
