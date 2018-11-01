@@ -11,6 +11,8 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetLogLevel(OF_LOG_SILENT); // for now keep output silent
+    this->_isLogFileCreated = false;
     ofSetFrameRate(60);
     loadSettingsAndWriteDefaultIfNeeded();
     setupUI();
@@ -263,11 +265,18 @@ void ofApp::setPathToLimacon(){
 
 void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
+        if (this->_isLogFileCreated == false) {
+            this->_isLogFileCreated = true;
+            ofLogToFile(nowToString() + ".txt"); // set output filename
+        }
+        ofSetLogLevel(OF_LOG_NOTICE); // activate logging
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
     } else {
         this->_eog_trigger->stopRecording();
         this->_toggle_button_eog.setTextColor(ofColor::red);
+        ofSetLogLevel(OF_LOG_SILENT); // deactivate logging
+        this->_isLogFileCreated = false;
     }
 }
 
@@ -405,6 +414,17 @@ void ofApp::writeDefaultSettings() {
     }
     this->_settings->popTag();
     this->_settings->saveFile();
+}
+
+string ofApp::nowToString() {
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+    time (&rawtime);
+    timeinfo = localtime(&rawtime);
+    strftime(buffer,sizeof(buffer),"%d-%m-%Y_%H-%M-%S",timeinfo);
+    std::string str(buffer);
+    return str;
 }
 
 string ofApp::getIPhost() {

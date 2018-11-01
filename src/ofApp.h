@@ -6,6 +6,7 @@
 #include "ofx_udp_trigger.h"
 #include "vicon_receiver.h"
 #include "ofx_blinky.h"
+#include <ctime>
 
 class ofApp : public ofBaseApp{
 
@@ -86,4 +87,8 @@ private:
     void setupTCPserver();
     void sendMessageToPhone(int client, string message);
     ofxTCPServer* _android_tcp_server;
+
+    // data logging
+    string nowToString();
+    bool _isLogFileCreated;
 };
