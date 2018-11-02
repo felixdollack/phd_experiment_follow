@@ -23,14 +23,25 @@ void ofApp::setup(){
     this->_time = 0.0f;
     this->_step_duration = 1.0f/60;
     this->_path_step = (2*PI)/(this->_path_duration*60);
-    this->_origin.x = 0.0f;
-    this->_origin.y = 0.0f;
-    this->_origin.z = 0.0f;
-    this->_origin.phi = 0.0f;
     this->_source_instance = new Blinky(this->_source_radius);
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
     setPathToEight();
+}
+
+void ofApp::setupParticipant() {
+    this->_origin.x = 0.0f;
+    this->_origin.y = 0.0f;
+    this->_origin.z = 0.0f;
+    this->_origin.phi = 0.0f;
+    this->_current.x = 0.0f;
+    this->_current.y = 0.0f;
+    this->_current.z = 0.0f;
+    this->_current.phi = 0.0f;
+    this->_old.x = 0.0f;
+    this->_old.y = 0.0f;
+    this->_old.z = 0.0f;
+    this->_old.phi = 0.0f;
 }
 
 void ofApp::setupTCPserver() {

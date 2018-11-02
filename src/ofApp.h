@@ -95,7 +95,8 @@ private:
     ofxTCPServer* _android_tcp_server;
 
     // data logging
+    void setupParticipant();
     string nowToString();
     bool _isLogFileCreated;
-    Participant _origin;
+    Participant _origin, _current, _old;
 };
