@@ -8,6 +8,13 @@
 #include "ofx_blinky.h"
 #include <ctime>
 
+struct Participant {
+    float x;
+    float y;
+    float z;
+    float phi;
+};
+
 class ofApp : public ofBaseApp{
 
 	public:
@@ -51,7 +58,6 @@ private:
     void drawVisualFeedback();
     float _ui_world_diameter;
     ofVec2f _ui_center, _ui_world_start;
-    float _x_origin, _y_origin, _z_origin, _phi_origin;
 
     // sound source specific settings
     float _source_height, _source_radius;
@@ -91,4 +97,5 @@ private:
     // data logging
     string nowToString();
     bool _isLogFileCreated;
+    Participant _origin;
 };

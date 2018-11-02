@@ -23,10 +23,10 @@ void ofApp::setup(){
     this->_time = 0.0f;
     this->_step_duration = 1.0f/60;
     this->_path_step = (2*PI)/(this->_path_duration*60);
-    this->_x_origin = 0.0f;
-    this->_y_origin = 0.0f;
-    this->_z_origin = 0.0f;
-    this->_phi_origin = 0.0f;
+    this->_origin.x = 0.0f;
+    this->_origin.y = 0.0f;
+    this->_origin.z = 0.0f;
+    this->_origin.phi = 0.0f;
     this->_source_instance = new Blinky(this->_source_radius);
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
@@ -136,8 +136,8 @@ void ofApp::draw(){
     this->_uiPanel.draw();
 
     ofSetColor(ofColor::white);
-    ofDrawBitmapString("origin (x/y): " + ofToString(this->_x_origin) + "/" + ofToString(this->_y_origin), 10, ofGetWindowHeight()-100);
-    ofDrawBitmapString("origin (phi): " + ofToString(this->_phi_origin), 10, ofGetWindowHeight()-85);
+    ofDrawBitmapString("origin (x/y): " + ofToString(this->_origin.x) + "/" + ofToString(this->_origin.y), 10, ofGetWindowHeight()-100);
+    ofDrawBitmapString("origin (phi): " + ofToString(this->_origin.phi), 10, ofGetWindowHeight()-85);
     ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
 }
 
@@ -221,11 +221,11 @@ void ofApp::sendMessageToPhone(int client, string message) {
 
 void ofApp::resetHeadOrigin() {
     // round to milimeter accuracy
-    this->_x_origin = round(this->_head_data.x_position)/1000;
-    this->_y_origin = round(this->_head_data.y_position)/1000;
-    this->_z_origin = round(this->_head_data.z_position)/1000;
+    this->_origin.x = round(this->_head_data.x_position)/1000;
+    this->_origin.y = round(this->_head_data.y_position)/1000;
+    this->_origin.z = round(this->_head_data.z_position)/1000;
     // round to 0.1 degree
-    this->_phi_origin = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
+    this->_origin.phi = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
 }
 
 ofVec2f ofApp::shape_eight(float a, float time, float time_offset) {
