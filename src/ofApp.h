@@ -96,6 +96,7 @@ private:
 
     // data logging
     void setupParticipant();
+    void updateParticipantPosition();
     string nowToString();
     bool _isLogFileCreated;
     Participant _origin, _current, _old;

@@ -118,6 +118,9 @@ void ofApp::update(){
     }
     this->_vicon_receiver.updateData();
     this->_head_data = this->_vicon_receiver.getLatestData();
+
+    updateParticipantPosition();
+
     // update source position
     if (this->_is_recording == true) {
         if (this->_selected_shape == 0) {
@@ -138,6 +141,20 @@ void ofApp::update(){
     }
     this->_source_instance->setPosition(this->_source_positions);
     this->_source_instance->update();
+}
+
+void ofApp::updateParticipantPosition() {
+    this->_old = this->_current;
+    // round to milimeter accuracy
+    this->_current.x = round(this->_head_data.x_position)/1000 - this->_origin.x;
+    this->_current.y = round(this->_head_data.y_position)/1000 - this->_origin.y;
+    this->_current.z = round(this->_head_data.z_position)/1000 - this->_origin.z;
+    // round to 0.1 degree and invert rotation direction for screen and android
+    this->_current.phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_origin.phi, 360.0f);
+
+    if ((this->_old.x != this->_current.x) || (this->_old.y != this->_current.y) || (this->_old.z != this->_current.z) || (this->_old.phi != this->_current.phi)) {
+        sendMessageToPhone(0, "POSITION/" + ofToString(this->_current.x) + "/" + ofToString(this->_current.y) + "/" + ofToString(this->_current.z) + "/" + ofToString(this->_current.phi));
+    }
 }
 
 //--------------------------------------------------------------
