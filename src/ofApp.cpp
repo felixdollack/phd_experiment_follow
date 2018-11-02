@@ -164,8 +164,14 @@ void ofApp::draw(){
     this->_uiPanel.draw();
 
     ofSetColor(ofColor::white);
+    ofDrawBitmapString("head (x/y): " + ofToString(this->_current.x) + "/" + ofToString(this->_current.y), 10, ofGetWindowHeight()-145);
+    ofDrawBitmapString("head (phi): " + ofToString(this->_current.phi), 10, ofGetWindowHeight()-130);
+
     ofDrawBitmapString("origin (x/y): " + ofToString(this->_origin.x) + "/" + ofToString(this->_origin.y), 10, ofGetWindowHeight()-100);
     ofDrawBitmapString("origin (phi): " + ofToString(this->_origin.phi), 10, ofGetWindowHeight()-85);
+
+    ofDrawBitmapString("sound (x/y): " + ofToString(this->_source_positions.x) + "/" + ofToString(this->_source_positions.y), 10, ofGetWindowHeight()-55);
+
     ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
 }
 
