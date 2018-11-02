@@ -187,6 +187,19 @@ void ofApp::drawVisualFeedback() {
             ofDrawCircle(this->_full_path[kk]*100, 1.0f);
         }
 
+        ofPushMatrix();
+        {
+            ofVec2f pos = ofVec2f(this->_current.x, this->_current.y);
+            ofTranslate(pos);
+            ofSetColor(ofColor::orange);
+            ofDrawCircle(0, 0, this->_ui_head_radius);
+            //ofRotateDeg(this->_head_phi, 0, 0, 1); // of_v0.10
+            ofRotateDeg(this->_current.phi); // of_v0.9
+            ofSetColor(ofColor::red);
+            ofDrawCircle(0, this->_ui_head_radius, 3);
+        }
+        ofPopMatrix();
+
         // draw sound source
         ofSetColor(ofColor::white);
         this->_source_instance->draw();
