@@ -134,7 +134,7 @@ void ofApp::update(){
         this->_current_phi += _path_step*(dt/_step_duration);
         this->_time = now;
         // sound source position
-        sendMessageToPhone(0, "SRCPOS/" + ofToString(this->_source_positions.x) + "/" + ofToString(this->_source_positions.y) + "/" + ofToString(this->_source_height));
+        sendMessageToPhone(0, "SRCPOS/" + ofToString(-this->_source_positions.x) + "/" + ofToString(this->_source_positions.y) + "/" + ofToString(this->_source_height));
     }
     if (this->_start_recoring == true){
         this->_current_phi = 0;
