@@ -222,22 +222,7 @@ void ofApp::drawVisualFeedback() {
 
 ofVec2f ofApp::mapPositionToPixel(ofVec2f pos) {
     float realWorld2PixelFactor = (this->_ui_max_distance / this->_max_distance);
-    float sign;
-
-    // points between the minimum and the maximum distance
-    if (pos.x < 0) {
-        sign = -1.0f;
-    } else {
-        sign = 1.0f;
-    }
     pos.x *= realWorld2PixelFactor;
-
-    // points between the minimum and the maximum distance
-    if (pos.y < 0) {
-        sign = -1.0f;
-    } else {
-        sign = 1.0f;
-    }
     pos.y *= realWorld2PixelFactor;
     return pos;
 }
