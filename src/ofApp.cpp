@@ -141,6 +141,10 @@ void ofApp::update(){
             // sound source position
             sendMessageToPhone(0, "SRCPOS/" + ofToString(-this->_source_positions.x) + "/" + ofToString(this->_source_positions.y) + "/" + ofToString(this->_source_height));
         }
+        if (this->_current_phi >= (2*PI * this->_path_revolutions)) {
+            bool t = false;
+            toggleSound(NULL, t);
+        }
     }
     if (this->_start_recoring == true){
         this->_current_phi = 0;
