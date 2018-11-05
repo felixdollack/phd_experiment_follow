@@ -101,6 +101,9 @@ void ofApp::setupVisualFeedback() {
     this->_ui_world_diameter = ofGetWindowHeight();
     this->_ui_center = ofVec2f(ofGetWindowWidth(), ofGetWindowHeight()) - this->_ui_world_diameter/2;
     this->_ui_world_start = this->_ui_center  - this->_ui_world_diameter/2;
+    this->_ui_max_distance = (this->_ui_world_diameter/2)*0.90;
+
+    this->_max_distance = 3.6f;
 }
 
 //--------------------------------------------------------------
@@ -185,6 +188,11 @@ void ofApp::drawVisualFeedback() {
     ofPushMatrix();
     {
         ofTranslate(this->_ui_center);
+        ofSetColor(ofColor::red);
+        ofDrawCircle(0, 0, this->_ui_max_distance + this->_line_width);
+        ofSetColor(ofColor::white);
+        ofDrawCircle(0, 0, this->_ui_max_distance);
+
         // draw sound path
         ofSetColor(ofColor::gray);
         for (int kk=0; kk<this->_full_path.size(); kk++) {
@@ -194,6 +202,7 @@ void ofApp::drawVisualFeedback() {
         ofPushMatrix();
         {
             ofVec2f pos = ofVec2f(this->_current.x, this->_current.y);
+            pos = mapPositionToPixel(pos);
             ofTranslate(pos);
             ofSetColor(ofColor::orange);
             ofDrawCircle(0, 0, this->_ui_head_radius);
@@ -209,6 +218,28 @@ void ofApp::drawVisualFeedback() {
         this->_source_instance->draw();
     }
     ofPopMatrix();
+}
+
+ofVec2f ofApp::mapPositionToPixel(ofVec2f pos) {
+    float realWorld2PixelFactor = (this->_ui_max_distance / this->_max_distance);
+    float sign;
+
+    // points between the minimum and the maximum distance
+    if (pos.x < 0) {
+        sign = -1.0f;
+    } else {
+        sign = 1.0f;
+    }
+    pos.x *= realWorld2PixelFactor;
+
+    // points between the minimum and the maximum distance
+    if (pos.y < 0) {
+        sign = -1.0f;
+    } else {
+        sign = 1.0f;
+    }
+    pos.y *= realWorld2PixelFactor;
+    return pos;
 }
 
 //--------------------------------------------------------------

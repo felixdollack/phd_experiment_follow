@@ -56,7 +56,9 @@ private:
     // visual feedback
     void setupVisualFeedback();
     void drawVisualFeedback();
-    float _ui_world_diameter;
+    ofVec2f mapPositionToPixel(ofVec2f pos);
+    float _line_width = 6.0f;
+    float _ui_world_diameter, _ui_max_distance;
     ofVec2f _ui_center, _ui_world_start;
 
     // sound source specific settings
@@ -81,6 +83,7 @@ private:
     int _mocap_receive_port, _mocap_send_port;
     string _mocap_ip;
     bool _use_vicon;
+    float _max_distance;
     ViconReceiver _vicon_receiver;
     HeadPositionAndRotation _head_data;
     void setupMotionCapture();
