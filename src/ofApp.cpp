@@ -156,7 +156,7 @@ void ofApp::updateParticipantPosition() {
     this->_current.phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_origin.phi, 360.0f);
 
     if ((this->_old.x != this->_current.x) || (this->_old.y != this->_current.y) || (this->_old.z != this->_current.z) || (this->_old.phi != this->_current.phi)) {
-        sendMessageToPhone(0, "POSITION/" + ofToString(this->_current.x) + "/" + ofToString(this->_current.y) + "/" + ofToString(this->_current.z) + "/" + ofToString(this->_current.phi));
+        sendMessageToPhone(0, "POSITION/" + ofToString(-this->_current.x) + "/" + ofToString(-this->_current.y) + "/" + ofToString(this->_current.z) + "/" + ofToString(this->_current.phi));
     }
 }
 
@@ -201,7 +201,7 @@ void ofApp::drawVisualFeedback() {
 
         ofPushMatrix();
         {
-            ofVec2f pos = ofVec2f(this->_current.x, this->_current.y);
+            ofVec2f pos = ofVec2f(this->_current.x, -this->_current.y);
             pos = mapPositionToPixel(pos);
             ofTranslate(pos);
             ofSetColor(ofColor::orange);
