@@ -151,7 +151,7 @@ void ofApp::updateParticipantPosition() {
     // round to milimeter accuracy
     this->_current.x = round(this->_head_data.x_position)/1000 - this->_origin.x;
     this->_current.y = round(this->_head_data.y_position)/1000 - this->_origin.y;
-    this->_current.z = round(this->_head_data.z_position)/1000 - this->_origin.z;
+    this->_current.z = round(this->_head_data.z_position)/1000;
     // round to 0.1 degree and invert rotation direction for screen and android
     this->_current.phi = fmod((360.0f - round(this->_head_data.z_rot_avg*10)/10) - this->_origin.phi, 360.0f);
 
