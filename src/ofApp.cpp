@@ -127,9 +127,9 @@ void ofApp::update(){
     // update source position
     if (this->_is_recording == true) {
         if (this->_selected_shape == 0) {
-            this->_source_positions = (shape_eight(1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset)*100;
+            this->_source_positions = shape_eight(1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
         } else {
-            this->_source_positions = (shape_limacon(0.5f, 1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset)*100;
+            this->_source_positions = shape_limacon(0.5f, 1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
         }
         this->_current_phi += _path_step*(dt/_step_duration);
         this->_time = now;
@@ -196,7 +196,7 @@ void ofApp::drawVisualFeedback() {
         // draw sound path
         ofSetColor(ofColor::gray);
         for (int kk=0; kk<this->_full_path.size(); kk++) {
-            ofDrawCircle(this->_full_path[kk]*100, 1.0f);
+            ofDrawCircle(mapPositionToPixel(this->_full_path[kk]), 1.0f);
         }
 
         ofPushMatrix();
@@ -215,7 +215,8 @@ void ofApp::drawVisualFeedback() {
 
         // draw sound source
         ofSetColor(ofColor::white);
-        this->_source_instance->draw();
+        ofVec2f pos = mapPositionToPixel(this->_source_instance->getPosition());
+        this->_source_instance->draw(pos.x, pos.y);
     }
     ofPopMatrix();
 }
