@@ -124,9 +124,9 @@ void ofApp::update(){
     // update source position
     if (this->_is_recording == true) {
         if (this->_selected_shape == 0) {
-            this->_source_positions = (shape_eight(1.0f, this->_current_phi + this->_phi_offset, 0.0f) - this->_shape_offset)*100;
+            this->_source_positions = (shape_eight(1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset)*100;
         } else {
-            this->_source_positions = (shape_limacon(0.5f, 1.0f, this->_current_phi + this->_phi_offset, 0.0f) - this->_shape_offset)*100;
+            this->_source_positions = (shape_limacon(0.5f, 1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset)*100;
         }
         this->_current_phi += _path_step*(dt/_step_duration);
         this->_time = now;
@@ -173,6 +173,10 @@ void ofApp::draw(){
     ofDrawBitmapString("sound (x/y): " + ofToString(this->_source_positions.x) + "/" + ofToString(this->_source_positions.y), 10, ofGetWindowHeight()-55);
 
     ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
+
+    ofSetColor(ofColor::black);
+    ofDrawBitmapString("\\- window -/", this->_ui_center.x - 45, ofGetWindowHeight()-15);
+    ofDrawBitmapString("door", this->_ui_world_start.x, this->_ui_center.y);
 }
 
 void ofApp::drawVisualFeedback() {
@@ -295,20 +299,20 @@ ofVec2f ofApp::shape_limacon(float b, float a, float time, float time_offset) {
 void ofApp::setPathToEight() {
     this->_selected_shape = 0;
     this->_phi_offset = 45;
-    this->_shape_offset = shape_eight(1.0f, this->_phi_offset, 0.0f);
+    this->_shape_offset = shape_eight(1.0f, -this->_phi_offset, 0.0f);
     this->_full_path.clear();
     for (int kk=0; kk<360; kk++) {
-        this->_full_path.push_back(shape_eight(1.0f, ((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
+        this->_full_path.push_back(shape_eight(1.0f, -((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
     }
 }
 
 void ofApp::setPathToLimacon(){
     this->_selected_shape = 1;
     this->_phi_offset = 45;
-    this->_shape_offset = shape_limacon(0.5f, 1.0f, + this->_phi_offset, 0.0f);
+    this->_shape_offset = shape_limacon(0.5f, 1.0f, -this->_phi_offset, 0.0f);
     this->_full_path.clear();
     for (int kk=0; kk<360; kk++) {
-        this->_full_path.push_back(shape_limacon(0.5f, 1.0f, ((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
+        this->_full_path.push_back(shape_limacon(0.5f, 1.0f, -((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
     }
 }
 
