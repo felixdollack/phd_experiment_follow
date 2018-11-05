@@ -305,7 +305,6 @@ void ofApp::resetHeadOrigin() {
     // round to milimeter accuracy
     this->_origin.x = round(this->_head_data.x_position)/1000;
     this->_origin.y = round(this->_head_data.y_position)/1000;
-    this->_origin.z = round(this->_head_data.z_position)/1000;
     // round to 0.1 degree
     this->_origin.phi = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
 }
