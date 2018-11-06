@@ -72,6 +72,7 @@ private:
     float _path_duration, _path_step, _step_duration, _path_revolutions;
     float _time, _current_phi, _phi_offset;
     ofVec2f _shape_offset;
+    bool _sound_on;
 
     // shimmer eog
     string _eog_host;
@@ -103,4 +104,5 @@ private:
     string nowToString();
     bool _isLogFileCreated;
     Participant _origin, _current, _old;
+    float _logStartTime;
 };

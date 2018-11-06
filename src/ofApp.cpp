@@ -26,6 +26,7 @@ void ofApp::setup(){
     this->_source_instance = new Blinky(this->_source_radius);
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
+    this->_sound_on = false;
     setPathToEight();
 }
 
@@ -42,6 +43,7 @@ void ofApp::setupParticipant() {
     this->_old.y = 0.0f;
     this->_old.z = 0.0f;
     this->_old.phi = 0.0f;
+    this->_logStartTime = 0.0f;
 }
 
 void ofApp::setupTCPserver() {
@@ -140,6 +142,8 @@ void ofApp::update(){
             }
         }
         this->_time = now;
+        // log current states
+        ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(-this->_current.x) + "," + ofToString(-this->_current.y) + "," + ofToString(this->_current.z) + "," + ofToString(this->_current.phi) + "," + ofToString(-this->_source_positions.x) + "," + ofToString(this->_source_positions.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
     }
     if (this->_start_recoring == true){
         this->_current_phi = 0;
@@ -343,6 +347,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
             ofLogToFile(nowToString() + ".txt"); // set output filename
         }
         ofSetLogLevel(OF_LOG_NOTICE); // activate logging
+        ofLogNotice("RECORD", ",TIME,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
     } else {
@@ -354,6 +359,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
 }
 
 void ofApp::toggleSound(const void *sender, bool &value) {
+    this->_sound_on = value;
     if (value == true) {
         // update ui
         this->_push_button_eight.removeListener(this, &ofApp::setPathToEight);
