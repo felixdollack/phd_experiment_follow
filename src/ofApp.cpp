@@ -20,8 +20,7 @@ void ofApp::setup(){
     setupTCPserver();
     setupEogTrigger();
     setupMotionCapture();
-    this->_time_src = 0.0f;
-    this->_timeUser = 0.0f;
+    this->_time = 0.0f;
     this->_step_duration = 1.0f/60;
     this->_path_step = (2*PI)/(this->_path_duration*60);
     this->_source_instance = new Blinky(this->_source_radius);
@@ -110,8 +109,7 @@ void ofApp::setupVisualFeedback() {
 //--------------------------------------------------------------
 void ofApp::update(){
     float now = ofGetElapsedTimef();
-    float dtSrc = now - this->_time_src;
-    float dtUser = now - this->_timeUser;
+    float dt = now - this->_time;
 
     if (this->_my_ip == "") {
         this->_my_ip = getIPhost();
@@ -124,33 +122,29 @@ void ofApp::update(){
     this->_vicon_receiver.updateData();
     this->_head_data = this->_vicon_receiver.getLatestData();
 
-    if (dtUser > 2*this->_step_duration) {
+    // update source and user position
+    if (dt > 2*this->_step_duration) {
         updateParticipantPosition();
-        this->_timeUser = now;
-    }
-    // update source position
-    if (this->_is_recording == true) {
-        if (this->_selected_shape == 0) {
-            this->_source_positions = shape_eight(1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
-        } else {
-            this->_source_positions = shape_limacon(0.5f, 1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
-        }
-        this->_current_phi += _path_step*(dtSrc/_step_duration);
-        if (dtSrc > 2*this->_step_duration) {
-            this->_time_src = now;
+        if (this->_is_recording == true) {
+            if (this->_selected_shape == 0) {
+                this->_source_positions = shape_eight(1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
+            } else {
+                this->_source_positions = shape_limacon(0.5f, 1.0f, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
+            }
+            this->_current_phi += _path_step*(dt/_step_duration);
             // sound source position
             sendMessageToPhone(0, "SRCPOS/" + ofToString(-this->_source_positions.x) + "/" + ofToString(this->_source_positions.y) + "/" + ofToString(this->_source_height));
+            if (this->_current_phi >= (2*PI * this->_path_revolutions)) {
+                bool t = false;
+                toggleSound(NULL, t);
+            }
         }
-        if (this->_current_phi >= (2*PI * this->_path_revolutions)) {
-            bool t = false;
-            toggleSound(NULL, t);
-        }
+        this->_time = now;
     }
     if (this->_start_recoring == true){
         this->_current_phi = 0;
         this->_start_recoring = false;
         this->_is_recording = true;
-        this->_time_src = ofGetElapsedTimef();
     }
     this->_source_instance->setPosition(this->_source_positions);
     this->_source_instance->update();
