@@ -60,6 +60,8 @@ private:
     float _line_width = 6.0f;
     float _ui_world_diameter, _ui_max_distance;
     ofVec2f _ui_center, _ui_world_start;
+    float _shape_eight_half_size, _shape_eight_phi_off;
+    float _shape_limacon_phi_off, _shape_limacon_center, _shape_limacon_offset;
 
     // sound source specific settings
     float _source_height, _source_radius;
