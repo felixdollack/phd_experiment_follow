@@ -107,4 +107,5 @@ private:
     bool _isLogFileCreated;
     Participant _origin, _current, _old;
     float _logStartTime;
+    string _username;
 };

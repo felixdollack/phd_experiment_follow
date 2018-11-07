@@ -344,7 +344,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
         if (this->_isLogFileCreated == false) {
             this->_isLogFileCreated = true;
-            ofLogToFile(nowToString() + ".txt"); // set output filename
+            ofLogToFile(this->_username + "_" + nowToString() + ".txt"); // set output filename
         }
         ofSetLogLevel(OF_LOG_NOTICE); // activate logging
         ofLogNotice("RECORD", ",TIME,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
@@ -401,6 +401,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         this->_source_radius = this->_settings->getValue("source_size", 12.0f);
         this->_settings->pushTag("subject");
         {
+            this->_username = this->_settings->getValue("name", "USER");
             this->_source_height = this->_settings->getValue("ear_height", 1.60f);
             this->_ui_head_radius = this->_settings->getValue("ui_radius", 2.0f);
         }
@@ -464,6 +465,7 @@ void ofApp::writeDefaultSettings() {
         this->_settings->addTag("subject");
         this->_settings->pushTag("subject");
         {
+            this->_settings->addValue("name", "USER");
             this->_settings->addValue("ear_height", 1.60f);
             this->_settings->addValue("ui_radius", 15.0f);
         }
