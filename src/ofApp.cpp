@@ -483,7 +483,7 @@ void ofApp::writeDefaultSettings() {
             this->_settings->pushTag("eight");
             {
                 this->_settings->addValue("half_len", 1.50f);
-                this->_settings->addValue("phi_offset", 225.0f);
+                this->_settings->addValue("phi_offset", 250.0f);
             }
             this->_settings->popTag();
             this->_settings->addTag("limacon");
