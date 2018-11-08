@@ -131,7 +131,7 @@ void ofApp::update(){
             if (this->_selected_shape == 0) {
                 this->_source_positions = shape_eight(this->_shape_eight_half_size, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
             } else {
-                this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
+                this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, (this->_current_phi - this->_phi_offset), 0.0f) - this->_shape_offset;
             }
             this->_current_phi += _path_step*(dt/_step_duration);
             // sound source position
@@ -316,7 +316,8 @@ ofVec2f ofApp::shape_limacon(float b, float a, float time, float time_offset) {
     float temp = b+a*cos(time + time_offset);
     float x = temp * cos(time + time_offset);
     float y = temp * sin(time + time_offset);
-    xy = ofVec2f(x, y);
+    //xy = ofVec2f(x, y);
+    xy = ofVec2f(y, x);
     return xy;
 }
 
