@@ -305,9 +305,10 @@ void ofApp::resetHeadOrigin() {
 
 ofVec2f ofApp::shape_eight(float a, float time, float time_offset) {
     ofVec2f xy;
+    float angle = -45.0f/180*PI;
     float y = a * cos(time + time_offset);
     float x = y * sin(time + time_offset);
-    xy = ofVec2f(x, y);
+    xy = ofVec2f(x * cos(angle) + y * sin(angle), x * -sin(angle) + y * cos(angle));
     return xy;
 }
 
