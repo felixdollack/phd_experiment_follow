@@ -129,9 +129,9 @@ void ofApp::update(){
         updateParticipantPosition();
         if (this->_is_recording == true) {
             if (this->_selected_shape == 0) {
-                this->_source_positions = shape_eight(this->_shape_eight_half_size, -(this->_current_phi + this->_phi_offset), 0.0f) - this->_shape_offset;
+                this->_source_positions = shape_eight(this->_shape_eight_half_size, -(this->_current_phi + (this->_phi_offset + 10.0f)/180*PI), 0.0f) - this->_shape_offset;
             } else {
-                this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, (this->_current_phi - this->_phi_offset), 0.0f) - this->_shape_offset;
+                this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, (this->_current_phi - (this->_phi_offset - 5.0f)/180*PI), 0.0f) - this->_shape_offset;
             }
             this->_current_phi += _path_step*(dt/_step_duration);
             // sound source position
@@ -324,7 +324,8 @@ ofVec2f ofApp::shape_limacon(float b, float a, float time, float time_offset) {
 void ofApp::setPathToEight() {
     this->_selected_shape = 0;
     this->_phi_offset = this->_shape_eight_phi_off;
-    this->_shape_offset = shape_eight(this->_shape_eight_half_size, -this->_phi_offset, 0.0f);
+    this->_shape_offset = shape_eight(this->_shape_eight_half_size, -this->_phi_offset/180*PI, 0.0f);
+    this->_source_positions = shape_eight(this->_shape_eight_half_size, -(this->_phi_offset+10.0f)/180*PI, 0.0f) - this->_shape_offset;
     this->_full_path.clear();
     for (int kk=0; kk<360; kk++) {
         this->_full_path.push_back(shape_eight(this->_shape_eight_half_size, -((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
@@ -334,7 +335,8 @@ void ofApp::setPathToEight() {
 void ofApp::setPathToLimacon(){
     this->_selected_shape = 1;
     this->_phi_offset = this->_shape_limacon_phi_off;
-    this->_shape_offset = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -this->_phi_offset, 0.0f);
+    this->_shape_offset = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -this->_phi_offset/180*PI, 0.0f);
+    this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -(this->_phi_offset-5.0f)/180*PI, 0.0f) - this->_shape_offset;
     this->_full_path.clear();
     for (int kk=0; kk<360; kk++) {
         this->_full_path.push_back(shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
@@ -480,7 +482,7 @@ void ofApp::writeDefaultSettings() {
             this->_settings->pushTag("eight");
             {
                 this->_settings->addValue("half_len", 1.50f);
-                this->_settings->addValue("phi_offset", 180.0f);
+                this->_settings->addValue("phi_offset", 225.0f);
             }
             this->_settings->popTag();
             this->_settings->addTag("limacon");
@@ -488,7 +490,7 @@ void ofApp::writeDefaultSettings() {
             {
                 this->_settings->addValue("center", 2.50f);
                 this->_settings->addValue("off_center", 0.50f);
-                this->_settings->addValue("phi_offset", 45.0f);
+                this->_settings->addValue("phi_offset", 55.0f);
             }
             this->_settings->popTag();
         }
