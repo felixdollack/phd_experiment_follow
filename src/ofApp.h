@@ -46,7 +46,7 @@ private:
     ofxButton _push_button_connect, _push_button_disconnect;
     ofxButton _reset_head_origin;
     // ui callbacks
-    void connectPhone();
+    //void connectPhone();
     void disconnectPhone();
     void resetHeadOrigin();
     void setPathToEight();
@@ -93,13 +93,21 @@ private:
     void setupMotionCapture();
 
     // network
-    int _android_port;
-    string _my_ip = "";
+    int _android_port; // 9000
+    string _my_ip = ""; // localhost or 0.0.0.0
     string getIPhost();
     vector<string> getLocalIPs();
     void setupTCPserver();
     void sendMessageToPhone(int client, string message);
-    ofxTCPServer* _android_tcp_server;
+    //ofxTCPServer* _android_tcp_server;
+    ofxOscSender *_ssr_osc;
+    void connectToSSR(bool value);
+    void loadSsrScene();
+    void streamSSR(bool value);
+    void updateSoundPos(float x, float y);
+    void updatePos(float x, float y);
+    void updateAngle(float phi);
+    bool _ssr_running;
 
     // data logging
     void setupParticipant();
