@@ -7,6 +7,7 @@
 #include "vicon_receiver.h"
 #include "ofx_blinky.h"
 #include <ctime>
+#include "ofxOsc.h"
 
 struct Participant {
     float x;

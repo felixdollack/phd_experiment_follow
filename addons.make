@@ -1,3 +1,4 @@
 ofxGui
 ofxNetwork
+ofxOsc
 ofxXmlSettings
