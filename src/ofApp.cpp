@@ -237,8 +237,8 @@ void ofApp::updateParticipantPosition() {
 
     if ((this->_old.x != this->_current.x) || (this->_old.y != this->_current.y) || (this->_old.z != this->_current.z) || (this->_old.phi != this->_current.phi)) {
         if (this->_ssr_running == true) {
-            updatePos(-this->_current.x, -this->_current.y);
-            updateAngle(this->_current.phi);
+            updatePos(-this->_current.y, this->_current.x);
+            updateAngle(fmod((270 + round(this->_head_data.z_rot_avg*10)/10) - this->_origin.phi, 360.0f));
         }
         //sendMessageToPhone(0, "POSITION/" + ofToString(-this->_current.x) + "/" + ofToString(-this->_current.y) + "/" + ofToString(this->_current.z) + "/" + ofToString(this->_current.phi));
     }
@@ -285,7 +285,8 @@ void ofApp::drawVisualFeedback() {
 
         ofPushMatrix();
         {
-            ofVec2f pos = ofVec2f(this->_current.x, -this->_current.y);
+            //ofVec2f pos = ofVec2f(this->_current.x, -this->_current.y);
+            ofVec2f pos = ofVec2f(this->_current.y, this->_current.x);
             pos = mapPositionToPixel(pos);
             ofTranslate(pos);
             ofSetColor(ofColor::orange);
