@@ -108,6 +108,7 @@ private:
 
     // network
     int _android_port; // 9000
+    string _android_ip;
     string _my_ip = ""; // localhost or 0.0.0.0
     string getIPhost();
     vector<string> getLocalIPs();
