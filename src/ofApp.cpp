@@ -53,6 +53,8 @@ void ofApp::setupTCPserver() {
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
     }*/
+    this->_tobii_osc = new ofxOscSender();
+    this->_tobii_osc->setup(this->_tobii_ip, this->_tobii_port);
 }
 
 void ofApp::connectToSSR(bool value) {
@@ -122,6 +124,90 @@ void ofApp::updateAngle(float phi) {
         msg.addFloatArg(phi);
         this->_ssr_osc->sendMessage(msg);
     }
+}
+
+void ofApp::setupProjectEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // set project
+    msg.setAddress("/set");
+    msg.addStringArg("project");
+    msg.addStringArg("eog_calibration");
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::setupSubjectEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // set participant
+    msg.setAddress("/set");
+    msg.addStringArg("participant");
+    msg.addStringArg(this->_username);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::connectEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // connect
+    msg.setAddress("/connect");
+    msg.addStringArg("?");
+    msg.addIntArg(1);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::streamEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // start streaming / wake up cameras
+    msg.setAddress("/stream");
+    msg.addStringArg("?");
+    msg.addIntArg(1);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::stopRecordingEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // stop recording
+    msg.setAddress("/record");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::cleanupEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // stop streaming
+    msg.setAddress("/stream");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+
+    // disconnect
+    msg.setAddress("/connect");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::calibrateEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    msg.setAddress("/set");
+    msg.addStringArg("calibration");
+    msg.addStringArg("?");
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::recordEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    msg.setAddress("/record");
+    msg.addStringArg("?");
+    msg.addIntArg(1);
+    _tobii_osc->sendMessage(msg);
+}
+
+void ofApp::sendEyeTrackerEvent(string message) {
+    ofxOscMessage msg = ofxOscMessage();
+    msg.setAddress("/set");
+    msg.addStringArg("trigger");
+    msg.addStringArg(message);
+    _tobii_osc->sendMessage(msg);
 }
 
 void ofApp::setupEogTrigger() {
@@ -533,6 +619,12 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         this->_settings->popTag();
         this->_settings->pushTag("network");
         {
+            this->_settings->addTag("tobii");
+            {
+                this->_tobii_port = this->_settings->getValue("port", 8000);
+                this->_tobii_ip = this->_settings->getValue("ip", "192.168.1.1");
+            }
+            this->_settings->popTag();
             this->_settings->pushTag("android");
             {
                 this->_android_ip = this->_settings->getValue("ip", "192.168.1.1");
@@ -600,6 +692,12 @@ void ofApp::writeDefaultSettings() {
         this->_settings->addTag("network");
         this->_settings->pushTag("network");
         {
+            this->_settings->addTag("tobii");
+            {
+                this->_settings->addValue("port", 8000);
+                this->_settings->addValue("ip", "192.168.1.1");
+            }
+            this->_settings->popTag();
             this->_settings->addTag("android");
             this->_settings->pushTag("android");
             {

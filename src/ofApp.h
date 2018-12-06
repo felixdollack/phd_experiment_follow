@@ -83,6 +83,20 @@ private:
     void setupEogTrigger();
     bool _start_recoring, _is_recording;
 
+    // tobii eye tracker
+    ofxOscSender *_tobii_osc;
+    string _tobii_ip;
+    int _tobii_port;
+    void setupProjectEyeTracker();
+    void setupSubjectEyeTracker();
+    void connectEyeTracker();
+    void streamEyeTracker();
+    void stopRecordingEyeTracker();
+    void cleanupEyeTracker();
+    void calibrateEyeTracker();
+    void recordEyeTracker();
+    void sendEyeTrackerEvent(string message);
+
     // motion capture
     int _mocap_receive_port, _mocap_send_port;
     string _mocap_ip;
