@@ -131,7 +131,7 @@ void ofApp::setupProjectEyeTracker() {
     // set project
     msg.setAddress("/set");
     msg.addStringArg("project");
-    msg.addStringArg("eog_calibration");
+    msg.addStringArg("hospital");
     _tobii_osc->sendMessage(msg);
 }
 
@@ -178,6 +178,8 @@ void ofApp::cleanupEyeTracker() {
     msg.addStringArg("?");
     msg.addIntArg(0);
     _tobii_osc->sendMessage(msg);
+
+    ofSleepMillis(1);
 
     // disconnect
     msg.setAddress("/connect");
@@ -227,7 +229,7 @@ void ofApp::setupMotionCapture() {
 void ofApp::setupUI() {
     this->_uiPanel.setup();
     this->_uiPanel.add(this->_phone_label.setup("PHONE",""));
-    this->_uiPanel.add(this->_push_button_connect.setup("connect to phone"));
+    this->_uiPanel.add(this->_push_button_connect.setup("connect to tobii"));
     this->_uiPanel.add(this->_push_button_disconnect.setup("disconnect from phone"));
 
     this->_uiPanel.add(this->_tracking_label.setup("TRACKING",""));
@@ -247,7 +249,7 @@ void ofApp::setupUI() {
     this->_toggle_button_sound.setTextColor(ofColor::red);
 
     // add gui listeners
-    //this->_push_button_connect.addListener(this, &ofApp::connectPhone);
+    this->_push_button_connect.addListener(this, &ofApp::connectPhone); // connect to tobii
     this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
     this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
@@ -422,6 +424,17 @@ void ofApp::keyPressed(int key){
     if (key == '7') {
         connectToSSR(false);
     }
+
+    if (key == 's') {
+        setupProjectEyeTracker();
+        ofSleepMillis(1);
+        setupSubjectEyeTracker();
+        ofSleepMillis(1);
+        streamEyeTracker();
+    }
+    if (key == 'c') {
+        calibrateEyeTracker();
+    }
 }
 
 //--------------------------------------------------------------
@@ -439,21 +452,23 @@ void ofApp::gotMessage(ofMessage msg){
 
 }
 
-/*void ofApp::connectPhone() {
-    if (this->_android_tcp_server->getNumClients() <= 0) {
+void ofApp::connectPhone() {
+    connectEyeTracker();
+    /*if (this->_android_tcp_server->getNumClients() <= 0) {
         bool success = this->_android_tcp_server->setup(this->_android_port);
-        if (success == true) {
-            this->_push_button_connect.removeListener(this, &ofApp::connectPhone);
+        if (success == true) {*/
+            //this->_push_button_connect.removeListener(this, &ofApp::connectPhone);
+            //this->_push_button_connect.setFillColor(ofColor::black);
+            /*this->_push_button_disconnect.setFillColor(ofColor::gray);
             this->_push_button_disconnect.addListener(this, &ofApp::disconnectPhone);
-            this->_push_button_connect.setFillColor(ofColor::black);
-            this->_push_button_disconnect.setFillColor(ofColor::gray);
             this->_push_button_disconnect.setTextColor(ofColor::white);
         }
-    }
-}*/
+    }*/
+}
 
 void ofApp::disconnectPhone() {
     connectToSSR(false);
+    cleanupEyeTracker();
     /*if (this->_android_tcp_server->isConnected()) {
         for (int clientID = 0; clientID < this->_android_tcp_server->getNumClients(); clientID++) {
             sendMessageToPhone(clientID, "END/");
@@ -530,6 +545,7 @@ void ofApp::setPathToLimacon(){
 
 void ofApp::toggleRecording(const void *sender, bool &value) {
     if (value == true) {
+        recordEyeTracker(); // this needs some time, so I do it first
         if (this->_isLogFileCreated == false) {
             this->_isLogFileCreated = true;
             ofLogToFile(this->_username + "_" + nowToString() + ".txt"); // set output filename
@@ -540,6 +556,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
     } else {
+        stopRecordingEyeTracker();
         this->_eog_trigger->stopRecording();
         this->_toggle_button_eog.setTextColor(ofColor::red);
         ofSetLogLevel(OF_LOG_SILENT); // deactivate logging
@@ -564,7 +581,9 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_eog_trigger->sendTrigger("sound_on");
         this->_start_recoring = true;
         this->_is_recording = false;
+        sendEyeTrackerEvent("sound_on");
     } else {
+        sendEyeTrackerEvent("sound_off");
         this->_eog_trigger->sendTrigger("sound_off");
         //sendMessageToPhone(0, "STOP/");
         streamSSR(false);
@@ -619,7 +638,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         this->_settings->popTag();
         this->_settings->pushTag("network");
         {
-            this->_settings->addTag("tobii");
+            this->_settings->pushTag("tobii");
             {
                 this->_tobii_port = this->_settings->getValue("port", 8000);
                 this->_tobii_ip = this->_settings->getValue("ip", "192.168.1.1");
