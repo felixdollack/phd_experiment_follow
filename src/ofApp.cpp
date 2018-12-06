@@ -239,7 +239,8 @@ void ofApp::setupUI() {
     this->_uiPanel.add(this->_presentation_label.setup("PRESENTATION",""));
     this->_uiPanel.add(this->_toggle_button_sound.setup("sound on", false));
     this->_uiPanel.add(this->_push_button_eight.setup("eight"));
-    this->_uiPanel.add(this->_push_button_limacon.setup("limacon"));
+    this->_uiPanel.add(this->_push_button_limacon.setup("circle right")); // limacon
+    this->_uiPanel.add(this->_push_button_circle.setup("circle left"));
 
     // set gui text and box colors
     this->_push_button_connect.setTextColor(ofColor::red);
@@ -255,6 +256,7 @@ void ofApp::setupUI() {
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
     this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
     this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
+    this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
 }
 
 void ofApp::setupVisualFeedback() {
@@ -289,8 +291,13 @@ void ofApp::update(){
         if (this->_is_recording == true) {
             if (this->_selected_shape == 0) {
                 this->_source_positions = shape_eight(this->_shape_eight_half_size, -(this->_current_phi + (this->_phi_offset + 10.0f)/180*PI), 0.0f) - this->_shape_offset;
-            } else {
-                this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, (this->_current_phi - (this->_phi_offset - 5.0f)/180*PI), 0.0f) - this->_shape_offset;
+            }
+            if (this->_selected_shape == 1) {
+                //this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, (this->_current_phi - (this->_phi_offset - 5.0f)/180*PI), 0.0f) - this->_shape_offset;
+                this->_source_positions = shape_circle(this->_shape_circle_diameter, (this->_current_phi - (this->_phi_offset - 15.0f)/180*PI), this->_direction) - this->_shape_offset;
+            }
+            if (this->_selected_shape == 2) {
+                this->_source_positions = shape_circle(this->_shape_circle_diameter, (this->_current_phi - (this->_phi_offset - 15.0f)/180*PI), this->_direction) - this->_shape_offset;
             }
             this->_current_phi += _path_step*(dt/_step_duration);
             // sound source position
@@ -502,6 +509,21 @@ void ofApp::resetHeadOrigin() {
     this->_origin.phi = 360.0f - round(this->_head_data.z_rot_avg*10)/10;
 }
 
+ofVec2f ofApp::shape_circle(float radius, float time, bool left) {
+    ofVec2f xy;
+    float angle = 0.5*PI;
+    if (left == true) {
+        angle *= -1;
+    }
+    float y = radius * cos(time);
+    float x = -radius * sin(time);
+    if (left == true) {
+        x *= -1;
+    }
+    xy = ofVec2f(x * cos(angle) + y * sin(angle), x * -sin(angle) + y * cos(angle));
+    return xy;
+}
+
 ofVec2f ofApp::shape_eight(float a, float time, float time_offset) {
     ofVec2f xy;
     float angle = -45.0f/180*PI;
@@ -532,14 +554,36 @@ void ofApp::setPathToEight() {
     }
 }
 
-void ofApp::setPathToLimacon(){
-    this->_selected_shape = 1;
+void ofApp::setPathToLimacon(){ // circle right
+    /*this->_selected_shape = 1;
     this->_phi_offset = this->_shape_limacon_phi_off;
     this->_shape_offset = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -this->_phi_offset/180*PI, 0.0f);
     this->_source_positions = shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -(this->_phi_offset-5.0f)/180*PI, 0.0f) - this->_shape_offset;
     this->_full_path.clear();
     for (int kk=0; kk<360; kk++) {
         this->_full_path.push_back(shape_limacon(this->_shape_limacon_offset, this->_shape_limacon_center, -((float)kk + this->_phi_offset)/180*PI, 0.0f) - this->_shape_offset);
+    }*/
+
+    this->_selected_shape = 2;
+    this->_direction = false;
+    this->_phi_offset = 0;
+    this->_shape_offset = shape_circle(this->_shape_circle_diameter, -this->_phi_offset/180*PI, this->_direction);
+    this->_source_positions = shape_circle(this->_shape_circle_diameter, -(this->_phi_offset - 15.0f)/180*PI, this->_direction) - this->_shape_offset;
+    this->_full_path.clear();
+    for (int kk=0; kk<360; kk++) {
+        this->_full_path.push_back(shape_circle(this->_shape_circle_diameter, -((float)kk + this->_phi_offset)/180*PI, this->_direction) - this->_shape_offset);
+    }
+}
+
+void ofApp::setPathToCircle() {
+    this->_selected_shape = 2;
+    this->_direction = true;
+    this->_phi_offset = 0;
+    this->_shape_offset = shape_circle(this->_shape_circle_diameter, -this->_phi_offset/180*PI, this->_direction);
+    this->_source_positions = shape_circle(this->_shape_circle_diameter, -(this->_phi_offset - 15.0f)/180*PI, this->_direction) - this->_shape_offset;
+    this->_full_path.clear();
+    for (int kk=0; kk<360; kk++) {
+        this->_full_path.push_back(shape_circle(this->_shape_circle_diameter, -((float)kk + this->_phi_offset)/180*PI, this->_direction) - this->_shape_offset);
     }
 }
 
@@ -570,10 +614,13 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         // update ui
         this->_push_button_eight.removeListener(this, &ofApp::setPathToEight);
         this->_push_button_limacon.removeListener(this, &ofApp::setPathToLimacon);
+        this->_push_button_circle.removeListener(this, &ofApp::setPathToCircle);
         this->_push_button_eight.setFillColor(ofColor::black);
         this->_push_button_limacon.setFillColor(ofColor::black);
+        this->_push_button_circle.setFillColor(ofColor::black);
         this->_push_button_eight.setTextColor(ofColor::black);
         this->_push_button_limacon.setTextColor(ofColor::black);
+        this->_push_button_circle.setTextColor(ofColor::black);
         this->_toggle_button_sound.setTextColor(ofColor::green);
         // send sound message
         //sendMessageToPhone(0, "PLAY/");
@@ -594,8 +641,12 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_limacon.setTextColor(ofColor::white);
         this->_push_button_eight.setFillColor(ofColor::gray);
         this->_push_button_limacon.setFillColor(ofColor(128));
+        this->_push_button_circle.setTextColor(ofColor::white);
+        this->_push_button_circle.setFillColor(ofColor::gray);
         this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
         this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
+        this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
+        loadSsrScene(); // reset scene to be able to continue
     }
 }
 
@@ -619,19 +670,22 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         {
             this->_path_duration = this->_settings->getValue("duration", 10);
             this->_path_revolutions = this->_settings->getValue("revolutions", 1);
-            this->_settings->addTag("eight");
             this->_settings->pushTag("eight");
             {
                 this->_shape_eight_half_size = this->_settings->getValue("half_len", 1.50f);
                 this->_shape_eight_phi_off = this->_settings->getValue("phi_offset", 180.0f);
             }
             this->_settings->popTag();
-            this->_settings->addTag("limacon");
             this->_settings->pushTag("limacon");
             {
                 this->_shape_limacon_center = this->_settings->getValue("center", 2.50f);
                 this->_shape_limacon_offset = this->_settings->getValue("off_center", 0.50f);
                 this->_shape_limacon_phi_off = this->_settings->getValue("phi_offset", 45.0f);
+            }
+            this->_settings->popTag();
+            this->_settings->pushTag("circle");
+            {
+                this->_shape_circle_diameter = this->_settings->getValue("diameter", 1.50f);
             }
             this->_settings->popTag();
         }
@@ -704,6 +758,12 @@ void ofApp::writeDefaultSettings() {
                 this->_settings->addValue("center", 2.50f);
                 this->_settings->addValue("off_center", 0.50f);
                 this->_settings->addValue("phi_offset", 55.0f);
+            }
+            this->_settings->popTag();
+            this->_settings->addTag("circle");
+            this->_settings->pushTag("circle");
+            {
+                this->_settings->addValue("diameter", 1.50f);
             }
             this->_settings->popTag();
         }
