@@ -48,7 +48,7 @@ void ofApp::setupParticipant() {
 
 void ofApp::setupTCPserver() {
     this->_ssr_osc = new ofxOscSender();
-    this->_ssr_osc->setup("localhost", this->_android_port);
+    this->_ssr_osc->setup(this->_android_ip, this->_android_port);
     /*if (this->_android_tcp_server == NULL) {
         this->_android_tcp_server = new ofxTCPServer();
         this->_android_tcp_server->setMessageDelimiter("");
@@ -535,6 +535,7 @@ void ofApp::loadSettingsAndWriteDefaultIfNeeded() {
         {
             this->_settings->pushTag("android");
             {
+                this->_android_ip = this->_settings->getValue("ip", "192.168.1.1");
                 this->_android_port = this->_settings->getValue("port", -1);
             }
             this->_settings->popTag();
@@ -602,6 +603,7 @@ void ofApp::writeDefaultSettings() {
             this->_settings->addTag("android");
             this->_settings->pushTag("android");
             {
+                this->_settings->addValue("ip", "192.168.1.1");
                 this->_settings->addValue("port", 9000);
             }
             this->_settings->popTag();
