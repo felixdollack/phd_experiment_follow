@@ -693,6 +693,7 @@ void ofApp::writeDefaultSettings() {
         this->_settings->pushTag("network");
         {
             this->_settings->addTag("tobii");
+            this->_settings->pushTag("tobii");
             {
                 this->_settings->addValue("port", 8000);
                 this->_settings->addValue("ip", "192.168.1.1");
