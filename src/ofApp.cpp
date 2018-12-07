@@ -162,6 +162,15 @@ void ofApp::streamEyeTracker() {
     _tobii_osc->sendMessage(msg);
 }
 
+void ofApp::stopStreamEyeTracker() {
+    ofxOscMessage msg = ofxOscMessage();
+    // start streaming / wake up cameras
+    msg.setAddress("/stream");
+    msg.addStringArg("?");
+    msg.addIntArg(0);
+    _tobii_osc->sendMessage(msg);
+}
+
 void ofApp::stopRecordingEyeTracker() {
     ofxOscMessage msg = ofxOscMessage();
     // stop recording
@@ -173,14 +182,6 @@ void ofApp::stopRecordingEyeTracker() {
 
 void ofApp::cleanupEyeTracker() {
     ofxOscMessage msg = ofxOscMessage();
-    // stop streaming
-    msg.setAddress("/stream");
-    msg.addStringArg("?");
-    msg.addIntArg(0);
-    _tobii_osc->sendMessage(msg);
-
-    ofSleepMillis(1);
-
     // disconnect
     msg.setAddress("/connect");
     msg.addStringArg("?");
@@ -441,6 +442,9 @@ void ofApp::keyPressed(int key){
     }
     if (key == 'c') {
         calibrateEyeTracker();
+    }
+    if (key == 'd') {
+        stopStreamEyeTracker();
     }
 }
 

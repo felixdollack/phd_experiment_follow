@@ -95,6 +95,7 @@ private:
     void setupSubjectEyeTracker();
     void connectEyeTracker();
     void streamEyeTracker();
+    void stopStreamEyeTracker();
     void stopRecordingEyeTracker();
     void cleanupEyeTracker();
     void calibrateEyeTracker();
