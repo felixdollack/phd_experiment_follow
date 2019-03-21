@@ -311,7 +311,7 @@ void ofApp::update(){
         }
         this->_time = now;
         // log current states
-        ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(-this->_current.x) + "," + ofToString(-this->_current.y) + "," + ofToString(this->_current.z) + "," + ofToString(this->_current.phi) + "," + ofToString(-this->_source_positions.x) + "," + ofToString(this->_source_positions.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
+        ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(this->_origin.phi) + "," + ofToString(-this->_current.x) + "," + ofToString(-this->_current.y) + "," + ofToString(this->_current.z) + "," + ofToString(this->_current.phi) + "," + ofToString(-this->_source_positions.x) + "," + ofToString(this->_source_positions.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
     //}
     if (this->_start_recoring == true){
         this->_current_phi = 0;
