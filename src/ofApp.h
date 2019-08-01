@@ -40,8 +40,8 @@ private:
     // ui
     void setupUI();
     ofxPanel _uiPanel;
-    ofxLabel _phone_label, _tracking_label, _presentation_label;
-    ofxToggle _toggle_button_eog, _toggle_button_sound;
+    ofxLabel _phone_label, _tracking_label, _presentation_label, _reproduction_label;
+    ofxToggle _toggle_button_eog, _toggle_button_sound, _reproduction_button;
     ofxButton _push_button_eight, _push_button_limacon, _push_button_circle;
     ofxButton _push_button_connect, _push_button_disconnect;
     ofxButton _reset_head_origin;
@@ -54,6 +54,7 @@ private:
     void setPathToCircle();
     void toggleRecording(const void *sender, bool &value);
     void toggleSound(const void *sender, bool &value);
+    void toggleReproduction(const void *sender, bool &value);
 
     // visual feedback
     void setupVisualFeedback();

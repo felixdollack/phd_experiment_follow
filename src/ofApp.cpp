@@ -244,6 +244,9 @@ void ofApp::setupUI() {
     this->_uiPanel.add(this->_push_button_limacon.setup("circle right")); // limacon
     this->_uiPanel.add(this->_push_button_circle.setup("circle left"));
 
+    this->_uiPanel.add(this->_reproduction_label.setup("REPRODUCTION", ""));
+    this->_uiPanel.add(this->_reproduction_button.setup("is reproduction", this->bReproduction));
+
     // set gui text and box colors
     this->_push_button_connect.setTextColor(ofColor::red);
     this->_push_button_disconnect.setFillColor(ofColor::black);
@@ -256,6 +259,7 @@ void ofApp::setupUI() {
     this->_reset_head_origin.addListener(this, &ofApp::resetHeadOrigin);
     this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
+    this->_reproduction_button.addListener(this, &ofApp::toggleReproduction);
     this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
     this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
     this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
@@ -397,10 +401,12 @@ void ofApp::drawVisualFeedback() {
         }
         ofPopMatrix();
 
-        // draw sound source
-        ofSetColor(ofColor::white);
-        ofVec2f pos = mapPositionToPixel(this->_source_instance->getPosition());
-        this->_source_instance->draw(pos.x, pos.y);
+        if (!this->bReproduction) {
+            // draw sound source
+            ofSetColor(ofColor::white);
+            ofVec2f pos = mapPositionToPixel(this->_source_instance->getPosition());
+            this->_source_instance->draw(pos.x, pos.y);
+        }
     }
     ofPopMatrix();
 }
@@ -436,14 +442,6 @@ void ofApp::keyPressed(int key){
         connectToSSR(false);
     }
 
-    if (key == 'r') {
-        if (this->bReproduction) {
-            this->bReproduction = false;
-        } else {
-            this->bReproduction = true;
-        }
-        cout << "reproduction mode " << this->bReproduction << endl;
-    }
     if (key == 's') {
         setupProjectEyeTracker();
         ofSleepMillis(1);
@@ -661,7 +659,16 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
         this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
         this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
-        loadSsrScene(); // reset scene to be able to continue
+        loadSsrScene(this->_selected_shape, this->_direction + int(this->bReproduction)); // reset scene to be able to continue
+    }
+}
+
+void ofApp::toggleReproduction(const void *sender, bool &value) {
+    this->bReproduction = value;
+    if (value == false) {
+        this->_reproduction_button.setTextColor(ofColor::white);
+    } else {
+        this->_reproduction_button.setTextColor(ofColor::green);
     }
 }
 
