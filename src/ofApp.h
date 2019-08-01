@@ -110,7 +110,7 @@ private:
     ViconReceiver _vicon_receiver;
     HeadPositionAndRotation _head_data;
     void setupMotionCapture();
-
+    bool bReproduction;
     // network
     int _android_port; // 9000
     string _android_ip;

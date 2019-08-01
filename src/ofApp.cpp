@@ -27,6 +27,7 @@ void ofApp::setup(){
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
     this->_sound_on = false;
+    this->bReproduction = false;
     setPathToEight();
 }
 
@@ -302,7 +303,9 @@ void ofApp::update(){
             }
             this->_current_phi += _path_step*(dt/_step_duration);
             // sound source position
-            updateSoundPos(-this->_source_positions.x, this->_source_positions.y);
+            if (!this->bReproduction) {
+                updateSoundPos(-this->_source_positions.x, this->_source_positions.y);
+            }
             //sendMessageToPhone(0, "SRCPOS/" + ofToString(-this->_source_positions.x) + "/" + ofToString(this->_source_positions.y) + "/" + ofToString(this->_source_height));
             if (this->_current_phi >= (2*PI * this->_path_revolutions)) {
                 bool t = false;
@@ -433,6 +436,14 @@ void ofApp::keyPressed(int key){
         connectToSSR(false);
     }
 
+    if (key == 'r') {
+        if (this->bReproduction) {
+            this->bReproduction = false;
+        } else {
+            this->bReproduction = true;
+        }
+        cout << "reproduction mode " << this->bReproduction << endl;
+    }
     if (key == 's') {
         setupProjectEyeTracker();
         ofSleepMillis(1);
