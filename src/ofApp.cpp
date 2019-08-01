@@ -616,7 +616,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
             ofLogToFile(this->_username + "_" + nowToString() + ".txt"); // set output filename
         }
         ofSetLogLevel(OF_LOG_NOTICE); // activate logging
-        ofLogNotice("RECORD", ",TIME,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
+        ofLogNotice("RECORD", ",TIME,PHI_ORIGIN,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
         this->_logStartTime = ofGetElapsedTimef();
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
