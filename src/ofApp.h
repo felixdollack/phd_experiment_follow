@@ -123,7 +123,7 @@ private:
     //ofxTCPServer* _android_tcp_server;
     ofxOscSender *_ssr_osc;
     void connectToSSR(bool value);
-    void loadSsrScene();
+    void loadSsrScene(int scene, int direction);
     void streamSSR(bool value);
     void updateSoundPos(float x, float y);
     void updatePos(float x, float y);

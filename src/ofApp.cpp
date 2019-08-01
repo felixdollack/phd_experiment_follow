@@ -71,12 +71,20 @@ void ofApp::connectToSSR(bool value) {
         this->_ssr_osc->sendMessage(msg);
     }
 }
-void ofApp::loadSsrScene() {
+void ofApp::loadSsrScene(int scene, int direction) {
     if (this->_ssr_osc != NULL) {
         ofxOscMessage msg = ofxOscMessage();
         msg.setAddress("/load");
-        msg.addStringArg("?");
-        msg.addStringArg("?");
+        switch (scene) {
+            case 1:
+                msg.addIntArg(direction);
+                msg.addIntArg(scene);
+                break;
+            default:
+                msg.addIntArg(direction);
+                msg.addIntArg(scene);
+                break;
+        }
         this->_ssr_osc->sendMessage(msg);
     }
 }
@@ -424,7 +432,7 @@ void ofApp::keyPressed(int key){
         connectToSSR(true);
     }
     if (key == '2') {
-        loadSsrScene();
+        loadSsrScene(this->_selected_shape + int(this->bReproduction), this->_direction);
     }
     if (key == '3') {
         streamSSR(true);
@@ -659,7 +667,7 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
         this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
         this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
-        loadSsrScene(this->_selected_shape, this->_direction + int(this->bReproduction)); // reset scene to be able to continue
+        loadSsrScene(this->_selected_shape + int(this->bReproduction), this->_direction); // reset scene to be able to continue
     }
 }
 
