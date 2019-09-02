@@ -120,7 +120,6 @@ private:
     vector<string> getLocalIPs();
     void setupTCPserver();
     void sendMessageToPhone(int client, string message);
-    //ofxTCPServer* _android_tcp_server;
     ofxOscSender *_ssr_osc;
     void connectToSSR(bool value);
     void loadSsrScene(string filename);
