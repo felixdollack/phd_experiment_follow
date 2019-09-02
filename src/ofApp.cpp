@@ -71,20 +71,12 @@ void ofApp::connectToSSR(bool value) {
         this->_ssr_osc->sendMessage(msg);
     }
 }
-void ofApp::loadSsrScene(int scene, int direction) {
+void ofApp::loadSsrScene(string filename) {
     if (this->_ssr_osc != NULL) {
         ofxOscMessage msg = ofxOscMessage();
         msg.setAddress("/load");
-        switch (scene) {
-            case 1:
-                msg.addIntArg(direction);
-                msg.addIntArg(scene);
-                break;
-            default:
-                msg.addIntArg(direction);
-                msg.addIntArg(scene);
-                break;
-        }
+        msg.addIntArg(0);
+        msg.addStringArg(filename);
         this->_ssr_osc->sendMessage(msg);
     }
 }
@@ -373,6 +365,7 @@ void ofApp::draw(){
     ofDrawBitmapString("IP: " + this->_my_ip, 10, ofGetWindowHeight()-25);
 
     ofSetColor(ofColor::black);
+    ofDrawBitmapString(this->_scene_name, this->_ui_center.x - 45, 15);
     ofDrawBitmapString("\\- window -/", this->_ui_center.x - 45, ofGetWindowHeight()-15);
     ofDrawBitmapString("door", this->_ui_world_start.x, this->_ui_center.y);
 }
@@ -432,7 +425,7 @@ void ofApp::keyPressed(int key){
         connectToSSR(true);
     }
     if (key == '2') {
-        loadSsrScene(this->_selected_shape + int(this->bReproduction), this->_direction);
+        loadSsrScene(this->_scene_name);
     }
     if (key == '3') {
         streamSSR(true);
@@ -566,6 +559,11 @@ ofVec2f ofApp::shape_limacon(float b, float a, float time, float time_offset) {
 
 void ofApp::setPathToEight() {
     this->_selected_shape = 0;
+    if (this->bReproduction) {
+        this->_scene_name = "ssr_scene_eight_reproduction";
+    } else {
+        this->_scene_name = "ssr_scene_eight";
+    }
     this->_phi_offset = this->_shape_eight_phi_off;
     this->_shape_offset = shape_eight(this->_shape_eight_half_size, -this->_phi_offset/180*PI, 0.0f);
     this->_source_positions = shape_eight(this->_shape_eight_half_size, -(this->_phi_offset+10.0f)/180*PI, 0.0f) - this->_shape_offset;
@@ -586,6 +584,11 @@ void ofApp::setPathToLimacon(){ // circle right
     }*/
 
     this->_selected_shape = 2;
+    if (this->bReproduction) {
+        this->_scene_name = "ssr_scene_CW_reproduction";
+    } else {
+        this->_scene_name = "ssr_scene_CW";
+    }
     this->_direction = false;
     this->_phi_offset = 0;
     this->_shape_offset = shape_circle(this->_shape_circle_diameter, -this->_phi_offset/180*PI, this->_direction);
@@ -598,6 +601,11 @@ void ofApp::setPathToLimacon(){ // circle right
 
 void ofApp::setPathToCircle() {
     this->_selected_shape = 2;
+    if (this->bReproduction) {
+        this->_scene_name = "ssr_scene_CCW_reproduction";
+    } else {
+        this->_scene_name = "ssr_scene_CCW";
+    }
     this->_direction = true;
     this->_phi_offset = 0;
     this->_shape_offset = shape_circle(this->_shape_circle_diameter, -this->_phi_offset/180*PI, this->_direction);
@@ -667,7 +675,7 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
         this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
         this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
-        loadSsrScene(this->_selected_shape + int(this->bReproduction), this->_direction); // reset scene to be able to continue
+        loadSsrScene(this->_scene_name); // reset scene to be able to continue
     }
 }
 
@@ -675,9 +683,12 @@ void ofApp::toggleReproduction(const void *sender, bool &value) {
     this->bReproduction = value;
     if (value == false) {
         this->_reproduction_button.setTextColor(ofColor::white);
+        this->_scene_name = this->_scene_name.substr(0, this->_scene_name.length()-13);
     } else {
         this->_reproduction_button.setTextColor(ofColor::green);
+        this->_scene_name += "_reproduction";
     }
+    cout << this->_scene_name << endl;
 }
 
 void ofApp::loadSettingsAndWriteDefaultIfNeeded() {

@@ -123,7 +123,7 @@ private:
     //ofxTCPServer* _android_tcp_server;
     ofxOscSender *_ssr_osc;
     void connectToSSR(bool value);
-    void loadSsrScene(int scene, int direction);
+    void loadSsrScene(string filename);
     void streamSSR(bool value);
     void updateSoundPos(float x, float y);
     void updatePos(float x, float y);
@@ -137,5 +137,5 @@ private:
     bool _isLogFileCreated;
     Participant _origin, _current, _old;
     float _logStartTime;
-    string _username;
+    string _username, _scene_name;
 };
