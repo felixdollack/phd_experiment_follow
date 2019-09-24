@@ -24,7 +24,9 @@ void ofApp::setup(){
     this->_source_positions = ofVec2f(0, 0);
     this->_source_instance->setPosition(this->_source_positions);
     this->_sound_on = false;
+    this->_landmarks_on = false;
     this->bReproduction = false;
+    this->bLandmarks = false;
     setPathToEight();
 }
 
@@ -233,6 +235,7 @@ void ofApp::setupUI() {
 
     this->_uiPanel.add(this->_presentation_label.setup("PRESENTATION",""));
     this->_uiPanel.add(this->_toggle_button_sound.setup("sound on", false));
+    this->_uiPanel.add(this->_landmarks_button.setup("landmarks on", this->bLandmarks));
     this->_uiPanel.add(this->_push_button_eight.setup("eight"));
     this->_uiPanel.add(this->_push_button_limacon.setup("circle right")); // limacon
     this->_uiPanel.add(this->_push_button_circle.setup("circle left"));
@@ -253,6 +256,7 @@ void ofApp::setupUI() {
     this->_toggle_button_eog.addListener(this, &ofApp::toggleRecording);
     this->_toggle_button_sound.addListener(this, &ofApp::toggleSound);
     this->_reproduction_button.addListener(this, &ofApp::toggleReproduction);
+    this->_landmarks_button.addListener(this, &ofApp::toggleLandmarks);
     this->_push_button_eight.addListener(this, &ofApp::setPathToEight);
     this->_push_button_limacon.addListener(this, &ofApp::setPathToLimacon);
     this->_push_button_circle.addListener(this, &ofApp::setPathToCircle);
@@ -628,10 +632,32 @@ void ofApp::toggleReproduction(const void *sender, bool &value) {
     this->bReproduction = value;
     if (value == false) {
         this->_reproduction_button.setTextColor(ofColor::white);
-        this->_scene_name = this->_scene_name.substr(0, this->_scene_name.length()-13);
+        if (this->bLandmarks) {
+            this->_scene_name = this->_scene_name.substr(0, this->_scene_name.length()-23);
+            this->_scene_name += "_landmarks";
+        } else {
+            this->_scene_name = this->_scene_name.substr(0, this->_scene_name.length()-13);
+        }
     } else {
         this->_reproduction_button.setTextColor(ofColor::green);
-        this->_scene_name += "_reproduction";
+        if (this->bLandmarks) {
+            this->_scene_name = this->_scene_name.substr(0, this->_scene_name.length()-10);
+            this->_scene_name += "_reproduction_landmarks";
+        } else {
+            this->_scene_name += "_reproduction";
+        }
+    }
+    cout << this->_scene_name << endl;
+}
+
+void ofApp::toggleLandmarks(const void *sender, bool &value) {
+    this->bLandmarks = value;
+    if (value == false) {
+        this->_landmarks_button.setTextColor(ofColor::white);
+        this->_scene_name = this->_scene_name.substr(0, this->_scene_name.length()-10);
+    } else {
+        this->_landmarks_button.setTextColor(ofColor::green);
+        this->_scene_name += "_landmarks";
     }
     cout << this->_scene_name << endl;
 }

@@ -41,7 +41,7 @@ private:
     void setupUI();
     ofxPanel _uiPanel;
     ofxLabel _phone_label, _tracking_label, _presentation_label, _reproduction_label;
-    ofxToggle _toggle_button_eog, _toggle_button_sound, _reproduction_button;
+    ofxToggle _toggle_button_eog, _toggle_button_sound, _reproduction_button, _landmarks_button;
     ofxButton _push_button_eight, _push_button_limacon, _push_button_circle;
     ofxButton _push_button_connect, _push_button_disconnect;
     ofxButton _reset_head_origin;
@@ -55,6 +55,7 @@ private:
     void toggleRecording(const void *sender, bool &value);
     void toggleSound(const void *sender, bool &value);
     void toggleReproduction(const void *sender, bool &value);
+    void toggleLandmarks(const void *sender, bool &value);
 
     // visual feedback
     void setupVisualFeedback();
@@ -80,7 +81,7 @@ private:
     float _path_duration, _path_step, _step_duration, _path_revolutions;
     float _time, _current_phi, _phi_offset;
     ofVec2f _shape_offset;
-    bool _sound_on;
+    bool _sound_on, _landmarks_on;
 
     // shimmer eog
     string _eog_host;
@@ -111,7 +112,7 @@ private:
     ViconReceiver _vicon_receiver;
     HeadPositionAndRotation _head_data;
     void setupMotionCapture();
-    bool bReproduction;
+    bool bReproduction, bLandmarks;
     // network
     int _android_port; // 9000
     string _android_ip;
