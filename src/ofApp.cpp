@@ -207,6 +207,7 @@ void ofApp::sendEyeTrackerEvent(string message) {
     msg.addStringArg("trigger");
     msg.addStringArg(message);
     _tobii_osc->sendMessage(msg);
+    ofLogNotice("TOBI " + ofToString(ofGetElapsedTimef()), "sent trigger");
 }
 
 void ofApp::setupEogTrigger() {
@@ -308,7 +309,7 @@ void ofApp::update(){
         }
         this->_time = now;
         // log current states
-        ofLogNotice("UPDATE", "," + ofToString(now-this->_logStartTime) + "," + ofToString(this->_origin.phi) + "," + ofToString(-this->_current.x) + "," + ofToString(-this->_current.y) + "," + ofToString(this->_current.z) + "," + ofToString(this->_current.phi) + "," + ofToString(-this->_source_positions.x) + "," + ofToString(this->_source_positions.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
+        ofLogNotice("UPDATE " + ofToString(ofGetElapsedTimef()), "," + ofToString(now-this->_logStartTime) + "," + ofToString(this->_origin.phi) + "," + ofToString(-this->_current.x) + "," + ofToString(-this->_current.y) + "," + ofToString(this->_current.z) + "," + ofToString(this->_current.phi) + "," + ofToString(-this->_source_positions.x) + "," + ofToString(this->_source_positions.y) + "," + ofToString(this->_source_height) + "," + ofToString(this->_sound_on));
     if (this->_start_recoring == true){
         this->_current_phi = 0;
         this->_start_recoring = false;
@@ -574,7 +575,7 @@ void ofApp::toggleRecording(const void *sender, bool &value) {
             ofLogToFile(this->_username + "_" + nowToString() + ".txt"); // set output filename
         }
         ofSetLogLevel(OF_LOG_NOTICE); // activate logging
-        ofLogNotice("RECORD", ",TIME,PHI_ORIGIN,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
+        ofLogNotice("RECORD " + ofToString(ofGetElapsedTimef()), ",TIME,PHI_ORIGIN,HEAD_X,HEAD_Y,HEAD_HEIGHT,HEAD_PHI,SOUND_X,SOUND_Y,SOUND_HEIGHT,SOUND_ON"); // write header
         this->_logStartTime = ofGetElapsedTimef();
         this->_toggle_button_eog.setTextColor(ofColor::green);
         this->_eog_trigger->startRecording();
