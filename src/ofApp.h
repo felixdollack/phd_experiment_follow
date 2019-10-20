@@ -88,6 +88,8 @@ private:
     UdpTrigger *_eog_trigger;
     void setupEogTrigger();
     bool _start_recoring, _is_recording;
+    ofSerial triggerBox;
+    void toggleTriggerBox();
 
     // tobii eye tracker
     ofxOscSender *_tobii_osc;

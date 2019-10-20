@@ -2,6 +2,9 @@
 
 void ofApp::exit(){
     this->_eog_trigger->stopRecording();
+    if (this->triggerBox.isInitialized()) {
+        this->triggerBox.close();
+    }
     disconnectPhone();
     this->_vicon_receiver.stop();
 }
@@ -215,6 +218,15 @@ void ofApp::setupEogTrigger() {
     this->_eog_trigger->connectToHost();
     this->_start_recoring = false;
     this->_is_recording = false;
+
+    // connect bluetooth/serial trigger box
+    this->triggerBox.setup("/dev/cu.SLAB_USBtoUART", 115200);
+}
+
+void ofApp::toggleTriggerBox() {
+    if (this->triggerBox.isInitialized()) {
+        this->triggerBox.writeByte('1');
+    }
 }
 
 void ofApp::setupMotionCapture() {
@@ -605,12 +617,14 @@ void ofApp::toggleSound(const void *sender, bool &value) {
         // send sound message
         streamSSR(true);
         this->_eog_trigger->sendTrigger("sound_on");
+        this->toggleTriggerBox();
         this->_start_recoring = true;
         this->_is_recording = false;
         sendEyeTrackerEvent("sound_on");
     } else {
         sendEyeTrackerEvent("sound_off");
         this->_eog_trigger->sendTrigger("sound_off");
+        this->toggleTriggerBox();
         //sendMessageToPhone(0, "STOP/");
         streamSSR(false);
         this->_start_recoring = false;
